@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 
-interface DreamDiaryApi {
+interface DreamDiaryApiService {
     @POST("api/v1/auth/login")
     suspend fun login(@Body request: LoginRequest): LoginResponse
 

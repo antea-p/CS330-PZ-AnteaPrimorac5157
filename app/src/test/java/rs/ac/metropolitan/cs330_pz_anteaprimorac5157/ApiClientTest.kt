@@ -10,12 +10,12 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApi
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApiService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.LoginRequest
 
 class ApiClientTest {
     private lateinit var mockWebServer: MockWebServer
-    private lateinit var api: DreamDiaryApi
+    private lateinit var api: DreamDiaryApiService
 
     @Before
     fun setup() {
@@ -28,7 +28,7 @@ class ApiClientTest {
             .baseUrl(mockWebServer.url("/"))
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
-            .create(DreamDiaryApi::class.java)
+            .create(DreamDiaryApiService::class.java)
     }
 
     @After
