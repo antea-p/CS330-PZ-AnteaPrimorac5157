@@ -53,4 +53,17 @@ class AuthenticationDaoTest {
         val retrieved = dao.find().first()
         assertNull(retrieved)
     }
+
+    @Test
+    fun testFindWhenNoEntryExists() = runBlocking {
+        val retrieved = dao.find().first()
+        assertNull(retrieved)
+    }
+
+    @Test
+    fun testDeleteWhenNoEntryExists() = runBlocking {
+        dao.delete()
+        val retrieved = dao.find().first()
+        assertNull(retrieved)
+    }
 }
