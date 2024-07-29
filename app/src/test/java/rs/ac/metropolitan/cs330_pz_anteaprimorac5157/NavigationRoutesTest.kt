@@ -7,12 +7,18 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.navigation.NavigationRou
 class NavigationRoutesTest {
 
     @Test
-    fun testDiaryRoute() {
+    fun `test Diary route`() {
         assertEquals("diary", NavigationRoutes.Diary.route)
     }
 
     @Test
-    fun testAccountRoute() {
+    fun `test Account route`() {
         assertEquals("account", NavigationRoutes.Account.route)
+    }
+
+    @Test
+    fun `test route uniqueness`() {
+        val routes = listOf(NavigationRoutes.Diary.route, NavigationRoutes.Account.route)
+        assertEquals(routes.size, routes.distinct().size)
     }
 }

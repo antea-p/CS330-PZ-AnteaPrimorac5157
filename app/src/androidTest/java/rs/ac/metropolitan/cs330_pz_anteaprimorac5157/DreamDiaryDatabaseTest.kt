@@ -32,8 +32,8 @@ class DreamDiaryDatabaseTest {
     }
 
     @Test
-    fun daoAreNotNull() {
-        assertNotNull(db.authenticationRepository())
-        assertNotNull(db.activityLogRepository())
+    fun `dao are not null`() {
+        assertNotNull(db.authenticationDao())
+        assertNotNull(db.activityLogDao())
     }
 }

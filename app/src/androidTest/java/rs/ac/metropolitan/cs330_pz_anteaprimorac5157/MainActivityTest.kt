@@ -1,53 +1,59 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157
 
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.MainActivity
-
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.MainActivity
 
 @HiltAndroidTest
 class MainActivityTest {
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
 
-    @get:Rule
+    @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
+    @Before
+    fun setup() {
+        hiltRule.inject()
+    }
+
     @Test
-    fun testNavigationToDiaryScreen() {
+    fun `test navigation to DiaryScreen`() {
         composeTestRule.onNodeWithText("Diary").performClick()
         composeTestRule.onNodeWithText("Diary Screen").assertIsDisplayed()
     }
 
     @Test
-    fun testNavigationToAccountScreen() {
+    fun `test navigation to AccountScreen`() {
         composeTestRule.onNodeWithText("Account").performClick()
-        composeTestRule.onNodeWithText("Account Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("account_screen").assertIsDisplayed()
     }
 
     @Test
-    fun testBottomNavigationBarExists() {
+    fun `test bottom navigation bar exists`() {
         composeTestRule.onNodeWithText("Diary").assertIsDisplayed()
         composeTestRule.onNodeWithText("Account").assertIsDisplayed()
     }
 
     @Test
-    fun testInitialScreenIsDiary() {
+    fun `test initial screen is DiaryScreen`() {
         composeTestRule.onNodeWithText("Diary Screen").assertIsDisplayed()
     }
 
     @Test
-    fun testNavigationBetweenScreens() {
+    fun `test navigation between screens`() {
         composeTestRule.onNodeWithText("Account").performClick()
-        composeTestRule.onNodeWithText("Account Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("account_screen").assertIsDisplayed()
 
         composeTestRule.onNodeWithText("Diary").performClick()
-        composeTestRule.onNodeWithText("Diary Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("diary_screen").assertIsDisplayed()
     }
 }

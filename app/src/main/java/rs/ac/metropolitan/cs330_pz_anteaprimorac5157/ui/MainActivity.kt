@@ -3,6 +3,7 @@ package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
@@ -14,6 +15,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -65,7 +68,7 @@ fun MainScreen() {
                 DiaryScreen()
             }
             composable(NavigationRoutes.Account.route) {
-                AccountScreen()
+                AccountScreenWrapper()
             }
         }
     }
@@ -73,10 +76,14 @@ fun MainScreen() {
 
 @Composable
 fun DiaryScreen() {
-    Text("Diary Screen")
+    Box(modifier = Modifier.testTag("diary_screen")) {
+        Text("Diary Screen")
+    }
 }
 
 @Composable
-fun AccountScreen() {
-    Text("Account Screen")
+fun AccountScreenWrapper(viewModel: AccountViewModelImpl = hiltViewModel()) {
+    Box(modifier = Modifier.testTag("account_screen")) {
+        AccountScreen(viewModel = viewModel)
+    }
 }

@@ -108,6 +108,7 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.arch.core.testing)
     testImplementation(libs.mockwebserver)
+    //testImplementation(libs.robolectric)
     androidTestImplementation(libs.junit.ext)
     androidTestImplementation(libs.arch.core.testing)
     androidTestImplementation(libs.coroutines.test)
@@ -116,9 +117,9 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     androidTestImplementation(libs.mockk)
     androidTestImplementation(libs.mockwebserver)
+    //androidTestImplementation(libs.robolectric)
     kspAndroidTest(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.testing)
-
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 

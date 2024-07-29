@@ -28,7 +28,7 @@ class ActivityLogDaoTest {
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, DreamDiaryDatabase::class.java).build()
-        dao = db.activityLogRepository()
+        dao = db.activityLogDao()
     }
 
     @After
@@ -37,7 +37,7 @@ class ActivityLogDaoTest {
     }
 
     @Test
-    fun insertAndFindMostRecent() = runBlocking {
+    fun `test findMostRecent with one entry`() = runBlocking {
         val activityLog = ActivityLogEntity(date = LocalDate.now())
         dao.insert(activityLog)
 
@@ -47,7 +47,7 @@ class ActivityLogDaoTest {
 
 
     @Test
-    fun testInsertMultipleAndRetrieveMostRecent() = runBlocking {
+    fun `test findMostRecent for multiple entries returns the most recent entry`() = runBlocking {
         val yesterday = LocalDate.now().minusDays(1)
         val today = LocalDate.now()
         val tomorrow = LocalDate.now().plusDays(1)
@@ -61,7 +61,7 @@ class ActivityLogDaoTest {
     }
 
     @Test
-    fun testFindMostRecentWithSameDate() = runBlocking {
+    fun `test findMostRecent with multiple same dates`() = runBlocking {
         val today = LocalDate.now()
 
         dao.insert(ActivityLogEntity(date = today))
@@ -74,7 +74,7 @@ class ActivityLogDaoTest {
     }
 
     @Test
-    fun findMostRecentWhenEmpty() = runBlocking {
+    fun `test findMostRecent when no entry exists`() = runBlocking {
         val retrieved = dao.findMostRecent().first()
         assertNull(retrieved)
     }

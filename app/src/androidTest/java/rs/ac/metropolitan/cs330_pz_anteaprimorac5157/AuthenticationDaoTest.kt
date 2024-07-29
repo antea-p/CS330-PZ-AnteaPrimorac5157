@@ -27,7 +27,7 @@ class AuthenticationDaoTest {
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, DreamDiaryDatabase::class.java).build()
-        dao = db.authenticationRepository()
+        dao = db.authenticationDao()
     }
 
     @After
@@ -36,7 +36,7 @@ class AuthenticationDaoTest {
     }
 
     @Test
-    fun testLogin_SavesAuthenticationToken() = runBlocking {
+    fun `test login saves AuthenticationEntity`() = runBlocking {
         val auth = AuthenticationEntity(token = "testToken", username = "testUser")
         dao.save(auth)
 
@@ -45,7 +45,7 @@ class AuthenticationDaoTest {
     }
 
     @Test
-    fun testLogout_DeletesAuthenticationToken() = runBlocking {
+    fun `test logout deletes AuthenticationEntity`() = runBlocking {
         val auth = AuthenticationEntity(token = "testToken", username = "testUser")
         dao.save(auth)
         dao.delete()
@@ -55,13 +55,13 @@ class AuthenticationDaoTest {
     }
 
     @Test
-    fun testFindWhenNoEntryExists() = runBlocking {
+    fun `test find when no entry exists`() = runBlocking {
         val retrieved = dao.find().first()
         assertNull(retrieved)
     }
 
     @Test
-    fun testDeleteWhenNoEntryExists() = runBlocking {
+    fun `test delete when no entry exists`() = runBlocking {
         dao.delete()
         val retrieved = dao.find().first()
         assertNull(retrieved)
