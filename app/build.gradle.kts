@@ -16,8 +16,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        // testInstrumentationRunner = "rs.ac.metropolitan.cs330_pz_anteaprimorac5157.HiltTestRunner"
+        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "rs.ac.metropolitan.cs330_pz_anteaprimorac5157.HiltTestRunner"
         // testInstrumentationRunnerArguments["androidx.work.multiprocess"] = "true"
         vectorDrawables {
             useSupportLibrary = true
