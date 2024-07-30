@@ -24,9 +24,10 @@ data class Emotion(
     val name: String
 )
 
-// TODO: azurirati sa createdDate, tagovima i emocijama
 data class CreateDiaryEntryRequest(
     val title: String,
     val content: String,
-    val userId: Int
+    val userId: Int,
+    val tags: List<Tag>,
+    val emotions: List<Emotion>
 )

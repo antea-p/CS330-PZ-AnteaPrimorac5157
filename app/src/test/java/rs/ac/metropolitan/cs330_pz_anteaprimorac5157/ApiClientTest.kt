@@ -12,7 +12,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.CreateDiaryEntryRequest
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApiService
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Emotion
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.LoginRequest
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Tag
 
 class ApiClientTest {
     private lateinit var mockWebServer: MockWebServer
@@ -156,7 +158,6 @@ class ApiClientTest {
         assertEquals("/api/v1/diary/1", request.path)
     }
 
-    // TODO: dodatni testovi ove vrste
     @Test
     fun `createDiaryEntry creates a new diary entry - no tags or emotions`() = runBlocking {
         // Given
@@ -176,7 +177,13 @@ class ApiClientTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest("New Entry", "This is a new entry", 1))
+        val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
+            "New Entry",
+            "This is a new entry",
+            1,
+            emptyList(),
+            emptyList()
+        ))
 
         // Then
         assertEquals(2, newEntry.id)
@@ -190,6 +197,141 @@ class ApiClientTest {
         assertTrue(requestBody.contains("\"title\":\"New Entry\""))
         assertTrue(requestBody.contains("\"content\":\"This is a new entry\""))
         assertTrue(requestBody.contains("\"userId\":1"))
+    }
+
+    @Test
+    fun `createDiaryEntry creates a new diary entry - one Tag, no Emotions`() = runBlocking {
+        // Given
+        val mockResponse = MockResponse()
+            .setResponseCode(201)
+            .setBody("""
+            {
+                "id": 2,
+                "title": "New Entry",
+                "content": "This is a new entry",
+                "createdDate": "2024-05-02",
+                "userId": 1,
+                "tags": [{"id": 1, "name": "Test"}],
+                "emotions": []
+            }
+        """.trimIndent())
+        mockWebServer.enqueue(mockResponse)
+
+        // When
+        val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
+            "New Entry",
+            "This is a new entry",
+            1,
+            listOf(Tag(1, "Test")),
+            emptyList()
+        ))
+
+        // Then
+        assertEquals(2, newEntry.id)
+        assertEquals("New Entry", newEntry.title)
+        assertEquals("This is a new entry", newEntry.content)
+        assertEquals(1, newEntry.tags.size)
+        assertEquals(0, newEntry.emotions.size)
+
+        val request = mockWebServer.takeRequest()
+        assertEquals("POST", request.method)
+        assertEquals("/api/v1/diary", request.path)
+        val requestBody = request.body.readUtf8()
+        assertTrue(requestBody.contains("\"title\":\"New Entry\""))
+        assertTrue(requestBody.contains("\"content\":\"This is a new entry\""))
+        assertTrue(requestBody.contains("\"userId\":1"))
+        assertTrue(requestBody.contains("\"tags\":[{\"id\":1,\"name\":\"Test\"}]"))
+        assertTrue(requestBody.contains("\"emotions\":[]"))
+    }
+
+    @Test
+    fun `createDiaryEntry creates a new diary entry - no Tag, one Emotion`() = runBlocking {
+        // Given
+        val mockResponse = MockResponse()
+            .setResponseCode(201)
+            .setBody("""
+            {
+                "id": 3,
+                "title": "Emotional Entry",
+                "content": "This is an emotional entry",
+                "createdDate": "2024-05-03",
+                "userId": 1,
+                "tags": [],
+                "emotions": [{"id": 1, "name": "Happy"}]
+            }
+        """.trimIndent())
+        mockWebServer.enqueue(mockResponse)
+
+        // When
+        val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
+            "Emotional Entry",
+            "This is an emotional entry",
+            1,
+            emptyList(),
+            listOf(Emotion(1, "Happy"))
+        ))
+
+        // Then
+        assertEquals(3, newEntry.id)
+        assertEquals("Emotional Entry", newEntry.title)
+        assertEquals("This is an emotional entry", newEntry.content)
+        assertEquals(0, newEntry.tags.size)
+        assertEquals(1, newEntry.emotions.size)
+
+        val request = mockWebServer.takeRequest()
+        assertEquals("POST", request.method)
+        assertEquals("/api/v1/diary", request.path)
+        val requestBody = request.body.readUtf8()
+        assertTrue(requestBody.contains("\"title\":\"Emotional Entry\""))
+        assertTrue(requestBody.contains("\"content\":\"This is an emotional entry\""))
+        assertTrue(requestBody.contains("\"userId\":1"))
+        assertTrue(requestBody.contains("\"tags\":[]"))
+        assertTrue(requestBody.contains("\"emotions\":[{\"id\":1,\"name\":\"Happy\"}]"))
+    }
+
+    @Test
+    fun `createDiaryEntry creates a new diary entry - multiple Tags, multiple Emotions`() = runBlocking {
+        // Given
+        val mockResponse = MockResponse()
+            .setResponseCode(201)
+            .setBody("""
+            {
+                "id": 4,
+                "title": "Complex Entry",
+                "content": "This is a complex entry",
+                "createdDate": "2024-05-04",
+                "userId": 1,
+                "tags": [{"id": 1, "name": "Important"}, {"id": 2, "name": "Work"}],
+                "emotions": [{"id": 1, "name": "Happy"}, {"id": 2, "name": "Excited"}]
+            }
+        """.trimIndent())
+        mockWebServer.enqueue(mockResponse)
+
+        // When
+        val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
+            "Complex Entry",
+            "This is a complex entry",
+            1,
+            listOf(Tag(1, "Important"), Tag(2, "Work")),
+            listOf(Emotion(1, "Happy"), Emotion(2, "Excited"))
+        ))
+
+        // Then
+        assertEquals(4, newEntry.id)
+        assertEquals("Complex Entry", newEntry.title)
+        assertEquals("This is a complex entry", newEntry.content)
+        assertEquals(2, newEntry.tags.size)
+        assertEquals(2, newEntry.emotions.size)
+
+        val request = mockWebServer.takeRequest()
+        assertEquals("POST", request.method)
+        assertEquals("/api/v1/diary", request.path)
+        val requestBody = request.body.readUtf8()
+        assertTrue(requestBody.contains("\"title\":\"Complex Entry\""))
+        assertTrue(requestBody.contains("\"content\":\"This is a complex entry\""))
+        assertTrue(requestBody.contains("\"userId\":1"))
+        assertTrue(requestBody.contains("\"tags\":[{\"id\":1,\"name\":\"Important\"},{\"id\":2,\"name\":\"Work\"}]"))
+        assertTrue(requestBody.contains("\"emotions\":[{\"id\":1,\"name\":\"Happy\"},{\"id\":2,\"name\":\"Excited\"}]"))
     }
 
     @Test
