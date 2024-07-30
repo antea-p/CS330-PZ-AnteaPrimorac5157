@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.Authentication
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
 import javax.inject.Inject
 
 sealed class AccountUiState {
@@ -19,7 +20,7 @@ sealed class AccountUiState {
 
 @HiltViewModel
 class AccountViewModelImpl @Inject constructor(
-    private val authRepository: AuthenticationRepository
+    private val authService: AuthenticationService
 ) : ViewModel(), AccountViewModel {
 
     private val _uiState = MutableLiveData<AccountUiState>(AccountUiState.Loading)
@@ -31,28 +32,23 @@ class AccountViewModelImpl @Inject constructor(
 
     override fun checkAuthenticationStatus() {
         viewModelScope.launch {
-            authRepository.find().collect { authentication ->
-                if (authentication != null) {
-                    val isValid = authRepository.checkTokenValidity(authentication.token)
-                    if (isValid) {
-                        _uiState.value = AccountUiState.LoggedIn(authentication.username)
-                    } else {
-                        _uiState.value = AccountUiState.LoggedOut
-                    }
+            authService.checkAuthentication()
+            authService.getUsername().collect { username ->
+                _uiState.value = if (username != null) {
+                    AccountUiState.LoggedIn(username)
                 } else {
-                    _uiState.value = AccountUiState.LoggedOut
+                    AccountUiState.LoggedOut
                 }
             }
         }
     }
 
+
     override fun login(username: String, password: String) {
         viewModelScope.launch {
             _uiState.value = AccountUiState.Loading
             try {
-                val response = authRepository.login(username, password)
-                authRepository.save(Authentication(token = response.token, username = username))
-                _uiState.value = AccountUiState.LoggedIn(username)
+                authService.login(username, password)
             } catch (e: Exception) {
                 _uiState.value = AccountUiState.Error("Login failed: ${e.message}")
             }
@@ -61,18 +57,8 @@ class AccountViewModelImpl @Inject constructor(
 
     override fun logout() {
         viewModelScope.launch {
-            authRepository.delete()
-            _uiState.value = AccountUiState.LoggedOut
+            authService.logout()
         }
     }
 
-
-//    private suspend fun checkTokenValidity(token: String): Boolean {
-//        return try {
-//            val response = dreamDiaryApi.checkAuthentication("Bearer $token")
-//            response.authenticated
-//        } catch (e: Exception) {
-//            false
-//        }
-//    }
 }

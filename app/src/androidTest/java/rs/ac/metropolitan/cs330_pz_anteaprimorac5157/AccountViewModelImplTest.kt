@@ -5,12 +5,15 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepository
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.AccountUiState
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.AccountViewModelImpl
 import javax.inject.Inject
@@ -26,7 +29,7 @@ class AccountViewModelImplTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Inject
-    lateinit var authRepository: AuthenticationRepository
+    lateinit var authService: AuthenticationService
 
     private lateinit var viewModel: AccountViewModelImpl
 
@@ -36,7 +39,7 @@ class AccountViewModelImplTest {
     fun setup() {
         hiltRule.inject()
         Dispatchers.setMain(testDispatcher)
-        viewModel = AccountViewModelImpl(authRepository)
+        viewModel = AccountViewModelImpl(authService)
     }
 
     @After
@@ -47,10 +50,10 @@ class AccountViewModelImplTest {
     @Test
     fun `init checks authentication status`() = runTest {
         // Given
-        // Umetnut je FakeAuthenticationRepository
+        // Umetnut je FakeAuthenticationService
 
         // When
-        viewModel = AccountViewModelImpl(authRepository)
+        viewModel = AccountViewModelImpl(authService)
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
