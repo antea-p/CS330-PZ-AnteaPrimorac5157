@@ -86,9 +86,10 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = { onLogin(username, password) },
+            enabled = (username.isNotBlank() && password.isNotBlank()),
             modifier = Modifier.fillMaxWidth().testTag("login_button")
         ) {
-            Text("Log In")
+            Text("Login")
         }
     }
 }
@@ -112,7 +113,7 @@ fun LoggedInScreen(username: String, onLogout: () -> Unit) {
             onClick = onLogout,
             modifier = Modifier.fillMaxWidth().testTag("logout_button")
         ) {
-            Text("Log Out")
+            Text("Logout")
         }
     }
 }

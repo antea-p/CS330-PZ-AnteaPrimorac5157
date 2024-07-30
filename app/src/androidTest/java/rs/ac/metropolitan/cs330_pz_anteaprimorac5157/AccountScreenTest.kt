@@ -1,3 +1,4 @@
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -34,6 +35,25 @@ class AccountScreenTest {
     }
 
     @Test
+    fun `test Login button is disabled if username field is blank or empty`() {
+        composeTestRule.onNodeWithTag("password_input").performTextInput("testPassword")
+
+        composeTestRule.onNodeWithTag("login_button").assertIsNotEnabled()
+    }
+
+    @Test
+    fun `test Login button is disabled if password field is blank or empty`() {
+        composeTestRule.onNodeWithTag("username_input").performTextInput("testUsername")
+
+        composeTestRule.onNodeWithTag("login_button").assertIsNotEnabled()
+    }
+
+    @Test
+    fun `test Login button is disabled if both fields are blank or empty`() {
+        composeTestRule.onNodeWithTag("login_button").assertIsNotEnabled()
+    }
+
+    @Test
     fun `test LoggedInScreen appears after successful login`() {
         composeTestRule.onNodeWithTag("username_input").performTextInput("testUsername")
         composeTestRule.onNodeWithTag("password_input").performTextInput("testPassword")
@@ -43,6 +63,7 @@ class AccountScreenTest {
 
         composeTestRule.onNodeWithTag("logged_in_screen").assertExists()
     }
+
 
     @Test
     fun `test LoginScreen appears after user logs out`() {
