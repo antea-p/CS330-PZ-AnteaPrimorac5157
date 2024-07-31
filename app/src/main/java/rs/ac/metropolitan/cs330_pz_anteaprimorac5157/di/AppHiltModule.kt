@@ -17,6 +17,8 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.RetrofitHelper
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationMapper
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepositoryImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepository
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepositoryImpl
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationServiceImpl
 import javax.inject.Singleton
@@ -89,5 +91,11 @@ object AppHiltModule {
     @Singleton
     fun provideAuthenticationService(authRepository: AuthenticationRepository): AuthenticationService {
         return AuthenticationServiceImpl(authRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDreamDiaryRepository(apiService: DreamDiaryApiService): DreamDiaryRepository {
+        return DreamDiaryRepositoryImpl(apiService)
     }
 }
