@@ -65,19 +65,15 @@ fun MainScreen() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(NavigationRoutes.Diary.route) {
-                DiaryScreen()
+                DiaryScreen(
+                    onCreateEntry = { /* TODO: */ },
+                    onEntryClick = { /* TODO: */ }
+                )
             }
             composable(NavigationRoutes.Account.route) {
                 AccountScreenWrapper()
             }
         }
-    }
-}
-
-@Composable
-fun DiaryScreen() {
-    Box(modifier = Modifier.testTag("diary_screen")) {
-        Text("Diary Screen")
     }
 }
 

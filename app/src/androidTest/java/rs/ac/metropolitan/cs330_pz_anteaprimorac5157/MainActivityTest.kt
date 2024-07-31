@@ -28,7 +28,7 @@ class MainActivityTest {
     @Test
     fun `test navigation to DiaryScreen`() {
         composeTestRule.onNodeWithText("Diary").performClick()
-        composeTestRule.onNodeWithText("Diary Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("diary_screen").assertIsDisplayed()
     }
 
     @Test
@@ -45,7 +45,7 @@ class MainActivityTest {
 
     @Test
     fun `test initial screen is DiaryScreen`() {
-        composeTestRule.onNodeWithText("Diary Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("diary_screen").assertIsDisplayed()
     }
 
     @Test
