@@ -9,7 +9,6 @@ data class DiaryEntry(
     val title: String,
     val content: String,
     val createdDate: String,
-    val userId: Int,
     val tags: List<Tag>,
     val emotions: List<Emotion>
 )
@@ -27,7 +26,6 @@ data class Emotion(
 data class CreateDiaryEntryRequest(
     val title: String,
     val content: String,
-    val userId: Int,
     val tags: List<Tag>,
     val emotions: List<Emotion>
 )

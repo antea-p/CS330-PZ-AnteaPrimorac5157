@@ -180,7 +180,6 @@ class ApiClientTest {
         val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
             "New Entry",
             "This is a new entry",
-            1,
             emptyList(),
             emptyList()
         ))
@@ -196,7 +195,8 @@ class ApiClientTest {
         val requestBody = request.body.readUtf8()
         assertTrue(requestBody.contains("\"title\":\"New Entry\""))
         assertTrue(requestBody.contains("\"content\":\"This is a new entry\""))
-        assertTrue(requestBody.contains("\"userId\":1"))
+        assertTrue(requestBody.contains("\"tags\":[]"))
+        assertTrue(requestBody.contains("\"emotions\":[]"))
     }
 
     @Test
@@ -221,7 +221,6 @@ class ApiClientTest {
         val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
             "New Entry",
             "This is a new entry",
-            1,
             listOf(Tag(1, "Test")),
             emptyList()
         ))
@@ -239,7 +238,6 @@ class ApiClientTest {
         val requestBody = request.body.readUtf8()
         assertTrue(requestBody.contains("\"title\":\"New Entry\""))
         assertTrue(requestBody.contains("\"content\":\"This is a new entry\""))
-        assertTrue(requestBody.contains("\"userId\":1"))
         assertTrue(requestBody.contains("\"tags\":[{\"id\":1,\"name\":\"Test\"}]"))
         assertTrue(requestBody.contains("\"emotions\":[]"))
     }
@@ -266,7 +264,6 @@ class ApiClientTest {
         val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
             "Emotional Entry",
             "This is an emotional entry",
-            1,
             emptyList(),
             listOf(Emotion(1, "Happy"))
         ))
@@ -284,7 +281,6 @@ class ApiClientTest {
         val requestBody = request.body.readUtf8()
         assertTrue(requestBody.contains("\"title\":\"Emotional Entry\""))
         assertTrue(requestBody.contains("\"content\":\"This is an emotional entry\""))
-        assertTrue(requestBody.contains("\"userId\":1"))
         assertTrue(requestBody.contains("\"tags\":[]"))
         assertTrue(requestBody.contains("\"emotions\":[{\"id\":1,\"name\":\"Happy\"}]"))
     }
@@ -311,7 +307,6 @@ class ApiClientTest {
         val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
             "Complex Entry",
             "This is a complex entry",
-            1,
             listOf(Tag(1, "Important"), Tag(2, "Work")),
             listOf(Emotion(1, "Happy"), Emotion(2, "Excited"))
         ))
@@ -329,7 +324,6 @@ class ApiClientTest {
         val requestBody = request.body.readUtf8()
         assertTrue(requestBody.contains("\"title\":\"Complex Entry\""))
         assertTrue(requestBody.contains("\"content\":\"This is a complex entry\""))
-        assertTrue(requestBody.contains("\"userId\":1"))
         assertTrue(requestBody.contains("\"tags\":[{\"id\":1,\"name\":\"Important\"},{\"id\":2,\"name\":\"Work\"}]"))
         assertTrue(requestBody.contains("\"emotions\":[{\"id\":1,\"name\":\"Happy\"},{\"id\":2,\"name\":\"Excited\"}]"))
     }
@@ -337,8 +331,7 @@ class ApiClientTest {
     @Test
     fun `deleteDiaryEntry deletes a diary entry`() = runBlocking {
         // Given
-        val mockResponse = MockResponse()
-            .setResponseCode(204)
+        val mockResponse = MockResponse().setResponseCode(204)
         mockWebServer.enqueue(mockResponse)
 
         // When
