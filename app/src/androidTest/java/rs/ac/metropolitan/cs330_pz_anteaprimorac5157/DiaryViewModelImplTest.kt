@@ -99,4 +99,5 @@ class DiaryViewModelImplTest {
         assert(state.entries[0].title == "New Title")
         assert(state.entries[0].content == "New Content")
     }
+
 }

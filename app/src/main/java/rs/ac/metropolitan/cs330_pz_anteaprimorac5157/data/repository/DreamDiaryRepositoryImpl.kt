@@ -27,6 +27,13 @@ class DreamDiaryRepositoryImpl @Inject constructor(
         return apiService.getDiaryEntryById(id).toDomain()
     }
 
+    override suspend fun deleteDiaryEntry(id: Int) {
+        val response = apiService.deleteDiaryEntry(id)
+        if (!response.isSuccessful) {
+            throw Exception("Failed to delete entry: ${response.message()}")
+        }
+    }
+
     // TODO: mapper
     private fun rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DiaryEntry.toDomain(): DiaryEntry {
         return DiaryEntry(

@@ -7,4 +7,5 @@ interface DreamDiaryRepository {
     fun getDiaryEntries(): Flow<List<DiaryEntry>>
     suspend fun createDiaryEntry(title: String, content: String): DiaryEntry
     suspend fun getDiaryEntryById(id: Int): DiaryEntry
+    suspend fun deleteDiaryEntry(id: Int)
 }

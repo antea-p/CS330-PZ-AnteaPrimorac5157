@@ -17,8 +17,8 @@ class FakeDreamDiaryRepository : DreamDiaryRepository {
             title = title,
             content = content,
             createdDate = "2023-08-01",
-            tags = emptyList(),
-            emotions = emptyList()
+            tags = listOf("Tag1"),
+            emotions = listOf("Emotion1")
         )
         diaryEntries.add(newEntry)
         return newEntry
@@ -29,8 +29,13 @@ class FakeDreamDiaryRepository : DreamDiaryRepository {
             ?: throw NoSuchElementException("No diary entry found with id $id")
     }
 
-    fun clear() {
-        diaryEntries.clear()
-        nextId = 1
+    override suspend fun deleteDiaryEntry(id: Int) {
+        val entryToRemove = diaryEntries.find { it.id == id }
+        if (entryToRemove != null) {
+            diaryEntries.remove(entryToRemove)
+        } else {
+            throw NoSuchElementException("No diary entry found with id $id")
+        }
     }
+
 }

@@ -1,5 +1,6 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157
 
+import okhttp3.ResponseBody
 import retrofit2.Response
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.AuthenticationResponse
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.CreateDiaryEntryRequest
@@ -50,7 +51,14 @@ class FakeDreamDiaryApiService : DreamDiaryApiService {
     }
 
     override suspend fun deleteDiaryEntry(id: Int): Response<Unit> {
-        TODO("Not yet implemented")
+        if (shouldThrowError) throw Exception("Test exception")
+        val entryIndex = diaryEntries.indexOfFirst { it.id == id }
+        return if (entryIndex != -1) {
+            diaryEntries.removeAt(entryIndex)
+            Response.success(Unit)
+        } else {
+            Response.error(404, ResponseBody.create(null, "Entry not found"))
+        }
     }
 
 }

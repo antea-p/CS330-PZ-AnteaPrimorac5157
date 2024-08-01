@@ -4,18 +4,19 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.DiaryEntry
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryUiState
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryViewModel
 
-// TODO: elegantnije rijesiti praznu listu
 class FakeDiaryViewModel(loggedIn: Boolean) : DiaryViewModel {
   private val _uiState = MutableLiveData(
       if (loggedIn) DiaryUiState.Loading else DiaryUiState.LoggedOut)
   override val uiState = _uiState
 
     init {
-        if (loggedIn) {
-            loadDiaryEntries()
-        } else {
+        if (!loggedIn) {
             _uiState.postValue(DiaryUiState.LoggedOut)
         }
+    }
+
+    fun loadEmptyDiaryEntryList() {
+        _uiState.postValue(DiaryUiState.Success(emptyList()))
     }
 
     override fun loadDiaryEntries() {
@@ -29,9 +30,10 @@ class FakeDiaryViewModel(loggedIn: Boolean) : DiaryViewModel {
     override fun createDiaryEntry(title: String, content: String) {
         TODO("Not yet implemented")
     }
-    
-    fun loadEmptyDiaryEntryList() {
-        _uiState.postValue(DiaryUiState.Success(emptyList()))
+
+    override fun forceRefresh() {
+        TODO("Not yet implemented")
     }
+
 }
 

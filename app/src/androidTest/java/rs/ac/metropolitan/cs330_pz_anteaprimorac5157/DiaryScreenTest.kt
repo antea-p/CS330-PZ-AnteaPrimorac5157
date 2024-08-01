@@ -31,9 +31,12 @@ class DiaryScreenTest {
             DiaryScreen(
                 viewModel = viewModel,
                 onCreateEntry = {},
-                onEntryClick = {}
+                onEntryClick = {},
+                needsRefresh = false,
+                onRefreshComplete = {}
             )
         }
+
         composeTestRule.onNodeWithTag("logged_out_screen").assertIsDisplayed()
         composeTestRule.onNodeWithText("You are not currently logged in. Go to the account tab to log in!").assertIsDisplayed()
     }
@@ -41,12 +44,15 @@ class DiaryScreenTest {
     @Test
     fun `test DiaryScreen shows diary entries when state is LoggedIn and at least one diary entry exists`() {
         val viewModel = FakeDiaryViewModel(loggedIn = true)
+        viewModel.loadDiaryEntries()
 
         composeTestRule.setContent {
             DiaryScreen(
                 viewModel = viewModel,
                 onCreateEntry = {},
-                onEntryClick = {}
+                onEntryClick = {},
+                needsRefresh = false,
+                onRefreshComplete = {}
             )
         }
 
@@ -66,7 +72,9 @@ class DiaryScreenTest {
             DiaryScreen(
                 viewModel = viewModel,
                 onCreateEntry = {},
-                onEntryClick = {}
+                onEntryClick = {},
+                needsRefresh = false,
+                onRefreshComplete = {}
             )
         }
 
@@ -79,11 +87,15 @@ class DiaryScreenTest {
         val viewModel = FakeDiaryViewModel(loggedIn = true)
         var navigatedToId: Int? = null
 
+        viewModel.loadDiaryEntries()
+
         composeTestRule.setContent {
             DiaryScreen(
                 viewModel = viewModel,
                 onCreateEntry = {},
-                onEntryClick = { id -> navigatedToId = id }
+                onEntryClick = { id -> navigatedToId = id },
+                needsRefresh = false,
+                onRefreshComplete = {}
             )
         }
 
@@ -96,11 +108,15 @@ class DiaryScreenTest {
         val viewModel = FakeDiaryViewModel(loggedIn = true)
         var navigatedToCreateDiaryEntry = false
 
+        viewModel.loadDiaryEntries()
+
         composeTestRule.setContent {
             DiaryScreen(
                 viewModel = viewModel,
                 onCreateEntry = { navigatedToCreateDiaryEntry = true },
-                onEntryClick = {}
+                onEntryClick = {},
+                needsRefresh = false,
+                onRefreshComplete = {}
             )
         }
 

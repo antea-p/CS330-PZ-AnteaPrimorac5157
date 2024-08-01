@@ -14,5 +14,6 @@ interface DiaryViewModel {
     val uiState: LiveData<DiaryUiState>
     fun loadDiaryEntries()
     fun createDiaryEntry(title: String, content: String)
+    fun forceRefresh()
 }
 

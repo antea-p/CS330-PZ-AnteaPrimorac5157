@@ -27,19 +27,26 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun AccountScreen(
-    viewModel: AccountViewModel = viewModel()
+    viewModel: AccountViewModel = hiltViewModel<AccountViewModelImpl>()
 ) {
     val uiState by viewModel.uiState.observeAsState(AccountUiState.Loading)
 
-    when (val state = uiState) {
-        is AccountUiState.Loading -> LoadingScreen()
-        is AccountUiState.LoggedOut -> LoginScreen(onLogin = viewModel::login)
-        is AccountUiState.LoggedIn -> LoggedInScreen(username = state.username, onLogout = viewModel::logout)
-        is AccountUiState.Error -> ErrorScreen(message = state.message)
+    Box(modifier = Modifier.testTag("account_screen")) {
+        when (val state = uiState) {
+            is AccountUiState.Loading -> LoadingScreen()
+            is AccountUiState.LoggedOut -> LoginScreen(onLogin = viewModel::login)
+            is AccountUiState.LoggedIn -> LoggedInScreen(
+                username = state.username,
+                onLogout = viewModel::logout
+            )
+
+            is AccountUiState.Error -> ErrorScreen(message = state.message)
+        }
     }
 }
 
@@ -72,7 +79,9 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
             value = username,
             onValueChange = { username = it },
             label = { Text("Username") },
-            modifier = Modifier.fillMaxWidth().testTag("username_input")
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("username_input")
         )
         Spacer(modifier = Modifier.height(8.dp))
         TextField(
@@ -81,13 +90,17 @@ fun LoginScreen(onLogin: (String, String) -> Unit) {
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier.fillMaxWidth().testTag("password_input")
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("password_input")
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = { onLogin(username, password) },
             enabled = (username.isNotBlank() && password.isNotBlank()),
-            modifier = Modifier.fillMaxWidth().testTag("login_button")
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("login_button")
         ) {
             Text("Login")
         }
@@ -111,7 +124,9 @@ fun LoggedInScreen(username: String, onLogout: () -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = onLogout,
-            modifier = Modifier.fillMaxWidth().testTag("logout_button")
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("logout_button")
         ) {
             Text("Logout")
         }

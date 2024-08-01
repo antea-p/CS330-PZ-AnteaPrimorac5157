@@ -1,5 +1,6 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157
 
+import androidx.compose.foundation.layout.PaddingValues
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -108,5 +109,32 @@ class DreamDiaryRepositoryImplTest {
 //            }
 //        }
 //    }
+
+    @Test
+    fun `deleteDiaryEntry deletes entry successfully`() = runTest {
+        // Given
+        val entry = CreateDiaryEntryRequest("Title", "Content", emptyList(), emptyList())
+        val createdEntry = fakeDreamDiaryApiService.createDiaryEntry(entry)
+
+        // When
+        repository.deleteDiaryEntry(createdEntry.id)
+
+        // Then
+        assertThrows(Exception::class.java) {
+            runTest {
+                repository.getDiaryEntryById(createdEntry.id)
+            }
+        }
+    }
+
+    @Test
+    fun `deleteDiaryEntry throws exception when entry not found`() = runTest {
+        // When & Then
+        assertThrows(Exception::class.java) {
+            runTest {
+                repository.deleteDiaryEntry(999)
+            }
+        }
+    }
 
 }

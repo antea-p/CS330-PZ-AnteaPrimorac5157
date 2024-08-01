@@ -55,8 +55,7 @@ class DiaryViewModelImpl @Inject constructor(
         }
     }
 
-// TODO:
-//    override fun onDiaryEntryClicked(id: Int) {
-//
-//    }
+    override fun forceRefresh() {
+        loadDiaryEntries()
+    }
 }
