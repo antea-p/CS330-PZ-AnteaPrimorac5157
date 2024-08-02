@@ -123,4 +123,66 @@ class DiaryScreenTest {
         composeTestRule.onNodeWithTag("create_diary_entry_btn").performClick()
         assertEquals(true, navigatedToCreateDiaryEntry)
     }
+
+    @Test
+    fun `test DiaryScreen shows Last Opened text when available`() {
+        val viewModel = FakeDiaryViewModel(loggedIn = true)
+        viewModel.setLastOpenedText("2 days ago")
+        viewModel.loadDiaryEntries()
+
+        composeTestRule.setContent {
+            DiaryScreen(
+                viewModel = viewModel,
+                onCreateEntry = {},
+                onEntryClick = {},
+                needsRefresh = false,
+                onRefreshComplete = {}
+            )
+        }
+
+        composeTestRule.onNodeWithTag("last_opened_text").assertIsDisplayed()
+    }
+
+    @Test
+    fun `test DiaryScreen does not show Last Opened when unavailable`() {
+        val viewModel = FakeDiaryViewModel(loggedIn = true)
+        viewModel.setLastOpenedText(null)
+        viewModel.loadDiaryEntries()
+
+        composeTestRule.setContent {
+            DiaryScreen(
+                viewModel = viewModel,
+                onCreateEntry = {},
+                onEntryClick = {},
+                needsRefresh = false,
+                onRefreshComplete = {}
+            )
+        }
+
+        composeTestRule.onNodeWithTag("last_opened_text").assertDoesNotExist()
+    }
+
+    @Test
+    fun `test DiaryScreen updates Last Opened text when refreshed`() {
+        val viewModel = FakeDiaryViewModel(loggedIn = true)
+        viewModel.setLastOpenedText("2 days ago")
+        viewModel.loadDiaryEntries()
+
+        composeTestRule.setContent {
+            DiaryScreen(
+                viewModel = viewModel,
+                onCreateEntry = {},
+                onEntryClick = {},
+                needsRefresh = true,
+                onRefreshComplete = {}
+            )
+        }
+
+        composeTestRule.onNodeWithText("Last opened 2 days ago").assertIsDisplayed()
+
+        viewModel.setLastOpenedText("1 day ago")
+        viewModel.forceRefresh()
+
+        composeTestRule.onNodeWithText("Last opened 1 day ago").assertIsDisplayed()
+    }
 }

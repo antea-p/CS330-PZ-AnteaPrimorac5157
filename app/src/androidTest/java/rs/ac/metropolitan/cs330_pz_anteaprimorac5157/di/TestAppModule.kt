@@ -10,6 +10,7 @@ import dagger.hilt.testing.TestInstallIn
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.db.DreamDiaryDatabase
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepository
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.ActivityLogService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
 import javax.inject.Named
 import javax.inject.Singleton
@@ -46,6 +47,13 @@ object TestAppModule {
     fun provideDreamDiaryRepository(): DreamDiaryRepository {
         Log.d(TAG, "Providing FAKE DreamDiaryRepository")
         return FakeDreamDiaryRepository()
+    }
+
+    @Provides
+    @Singleton
+    fun provideActivityLogService(): ActivityLogService {
+        Log.d(TAG, "Providing FAKE ActivityLogService")
+        return FakeActivityLogService()
     }
 
     @Provides

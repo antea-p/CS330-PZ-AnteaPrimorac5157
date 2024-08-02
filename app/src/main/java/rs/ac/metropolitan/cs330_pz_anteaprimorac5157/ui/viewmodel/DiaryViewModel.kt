@@ -5,7 +5,7 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.DiaryEntry
 
 sealed class DiaryUiState {
     object Loading : DiaryUiState()
-    data class Success(val entries: List<DiaryEntry>) : DiaryUiState()
+    data class Success(val entries: List<DiaryEntry>, val lastOpenedText: String?) : DiaryUiState()
     object LoggedOut : DiaryUiState()
     data class Error(val message: String) : DiaryUiState()
 }
@@ -16,4 +16,3 @@ interface DiaryViewModel {
     fun createDiaryEntry(title: String, content: String)
     fun forceRefresh()
 }
-

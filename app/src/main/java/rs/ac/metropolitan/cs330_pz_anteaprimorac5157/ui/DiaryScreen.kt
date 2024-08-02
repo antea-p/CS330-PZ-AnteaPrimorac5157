@@ -23,17 +23,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.R
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.DiaryEntry
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryUiState
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryViewModel
@@ -62,6 +57,7 @@ fun DiaryScreen(
             is DiaryUiState.LoggedOut -> LoggedOutScreen()
             is DiaryUiState.Success -> DiaryEntriesList(
                 entries = state.entries,
+                lastOpenedText = state.lastOpenedText,
                 onEntryClick = onEntryClick,
                 onCreateEntry = onCreateEntry
             )
@@ -95,6 +91,7 @@ fun LoggedOutScreen() {
 @Composable
 fun DiaryEntriesList(
     entries: List<DiaryEntry>,
+    lastOpenedText: String?,
     onEntryClick: (Int) -> Unit,
     onCreateEntry: () -> Unit
 ) {
@@ -108,17 +105,32 @@ fun DiaryEntriesList(
             }
         }
     ) { paddingValues ->
-        if (entries.isEmpty()) {
-            EmptyDiaryEntriesList()
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .testTag("diary_entries_list")
-            ) {
-                items(entries) { entry ->
-                    DiaryEntryItem(entry = entry, onClick = { onEntryClick(entry.id) })
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            lastOpenedText?.let {
+                Text(
+                    text = "Last opened $it",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .testTag("last_opened_text")
+                )
+            }
+            if (entries.isEmpty()) {
+                EmptyDiaryEntriesList()
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .testTag("diary_entries_list")
+                ) {
+                    items(entries) { entry ->
+                        DiaryEntryItem(entry = entry, onClick = { onEntryClick(entry.id) })
+                    }
                 }
             }
         }

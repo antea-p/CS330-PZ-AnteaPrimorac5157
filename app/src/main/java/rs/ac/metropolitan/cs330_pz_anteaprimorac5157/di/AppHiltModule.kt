@@ -14,11 +14,15 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.db.DreamDiaryDatabase
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApiService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.RetrofitHelper
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.RetrofitHelperImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.ActivityLogRepository
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.ActivityLogRepositoryImpl
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationMapper
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepositoryImpl
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepositoryImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.ActivityLogService
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.ActivityLogServiceImpl
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationServiceImpl
 import javax.inject.Singleton
@@ -69,6 +73,18 @@ object AppHiltModule {
     @Singleton
     fun provideActivityLogDao(database: DreamDiaryDatabase): ActivityLogDao {
         return database.activityLogDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideActivityLogRepository(activityLogDao: ActivityLogDao): ActivityLogRepository {
+        return ActivityLogRepositoryImpl(activityLogDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideActivityLogService(repository: ActivityLogRepository): ActivityLogService {
+        return ActivityLogServiceImpl(repository)
     }
 
     @Provides
