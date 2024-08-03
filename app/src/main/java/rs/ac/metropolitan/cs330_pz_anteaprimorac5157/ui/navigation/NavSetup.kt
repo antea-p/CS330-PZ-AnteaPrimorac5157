@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.AccountScreen
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.CreateEntryScreen
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.DiaryScreen
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.DiaryEntryDetailsScreen
 
@@ -29,7 +30,7 @@ fun NavSetup(
     ) {
         composable(NavigationRoutes.Diary.route) {
             DiaryScreen(
-                onCreateEntry = { /* TODO: */ },
+                onCreateEntry = { navController.navigate(NavigationRoutes.CreateEntry.route) },
                 onEntryClick = { id ->
                     navController.navigate("${NavigationRoutes.DiaryEntryDetails.route}/${id}")
                 },
@@ -54,6 +55,14 @@ fun NavSetup(
 //                onEntryDeleted = {
 //                    navController.popBackStack(NavigationRoutes.Diary.route, false)
 //                }
+            )
+        }
+        composable(NavigationRoutes.CreateEntry.route) {
+            CreateEntryScreen(
+                onNavigateBack = {
+                    needsDiaryRefresh = true
+                    navController.popBackStack()
+                }
             )
         }
     }

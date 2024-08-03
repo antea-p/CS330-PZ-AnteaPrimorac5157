@@ -68,7 +68,7 @@ class DiaryViewModelImpl @Inject constructor(
     override fun createDiaryEntry(title: String, content: String) {
         viewModelScope.launch {
             try {
-                dreamDiaryRepository.createDiaryEntry(authService.getToken().first()!!, title, content)
+                dreamDiaryRepository.createDiaryEntry(authService.getToken().first()!!, "", "", emptyList(), emptyList())
                 loadDiaryEntries()
             } catch (e: Exception) {
                 _uiState.value = DiaryUiState.Error("Failed to create diary entry: ${e.message}")

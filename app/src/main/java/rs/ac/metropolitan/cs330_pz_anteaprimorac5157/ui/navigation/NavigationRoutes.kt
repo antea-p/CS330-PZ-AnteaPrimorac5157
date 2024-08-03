@@ -4,4 +4,5 @@ sealed class NavigationRoutes(val route: String) {
     object Diary : NavigationRoutes("diary")
     object Account : NavigationRoutes("account")
     object DiaryEntryDetails : NavigationRoutes("diary_entry_details")
+    object CreateEntry : NavigationRoutes("create_entry")
 }

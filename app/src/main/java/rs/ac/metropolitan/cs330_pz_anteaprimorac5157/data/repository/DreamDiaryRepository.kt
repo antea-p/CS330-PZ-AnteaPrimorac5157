@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface DreamDiaryRepository {
     fun getDiaryEntries(token: String): Flow<List<DiaryEntry>>
-    suspend fun createDiaryEntry(token: String, title: String, content: String): DiaryEntry
+    suspend fun createDiaryEntry(token: String, title: String, content: String, emotions: List<String>, tags: List<String>): DiaryEntry
     suspend fun getDiaryEntryById(token: String, id: Int): DiaryEntry
     suspend fun deleteDiaryEntry(token: String, id: Int)
 }

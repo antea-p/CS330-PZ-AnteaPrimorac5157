@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.CreateDiaryEntryRequest
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Emotion
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Tag
 import javax.inject.Inject
 
 class DreamDiaryRepositoryImpl @Inject constructor(
@@ -14,14 +16,19 @@ class DreamDiaryRepositoryImpl @Inject constructor(
 ) : DreamDiaryRepository {
 
     override fun getDiaryEntries(token: String): Flow<List<DiaryEntry>> = flow {
-        val  entries = apiService.getDiaryEntries("Bearer $token").map { it.toDomain() }
+        val entries = apiService.getDiaryEntries("Bearer $token").map { it.toDomain() }
         emit(entries)
     }
 
-    // TODO: tags, emotions
-    override suspend fun createDiaryEntry(token: String, title: String, content: String): DiaryEntry {
-        val request = CreateDiaryEntryRequest(title, content, emptyList(), emptyList())
-        return apiService.createDiaryEntry(token, request).toDomain()
+    override suspend fun createDiaryEntry(token: String, title: String, content: String, emotions: List<String>, tags: List<String>): DiaryEntry {
+        val request = CreateDiaryEntryRequest(
+            title = title,
+            content = content,
+            emotions = emotions,
+            tags = tags
+        )
+        Log.d("DreamDiaryRepository", "Request: $request")
+        return apiService.createDiaryEntry("Bearer $token", request).toDomain()
     }
 
     // TODO
