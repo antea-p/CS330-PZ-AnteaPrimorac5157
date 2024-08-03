@@ -17,6 +17,11 @@ class NavigationRoutesTest {
     }
 
     @Test
+    fun `test Diary Entry Details route`() {
+        assertEquals("diary_entry_details", NavigationRoutes.DiaryEntryDetails.route)
+    }
+
+    @Test
     fun `test route uniqueness`() {
         val routes = listOf(NavigationRoutes.Diary.route, NavigationRoutes.Account.route)
         assertEquals(routes.size, routes.distinct().size)

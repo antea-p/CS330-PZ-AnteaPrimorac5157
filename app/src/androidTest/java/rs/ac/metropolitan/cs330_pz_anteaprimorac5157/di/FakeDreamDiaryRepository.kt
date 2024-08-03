@@ -9,9 +9,9 @@ class FakeDreamDiaryRepository : DreamDiaryRepository {
     private val diaryEntries = mutableListOf<DiaryEntry>()
     private var nextId = 1
 
-    override fun getDiaryEntries(): Flow<List<DiaryEntry>> = flowOf(diaryEntries)
+    override fun getDiaryEntries(token: String): Flow<List<DiaryEntry>> = flowOf(diaryEntries)
 
-    override suspend fun createDiaryEntry(title: String, content: String): DiaryEntry {
+    override suspend fun createDiaryEntry(token: String, title: String, content: String): DiaryEntry {
         val newEntry = DiaryEntry(
             id = nextId++,
             title = title,
@@ -24,12 +24,12 @@ class FakeDreamDiaryRepository : DreamDiaryRepository {
         return newEntry
     }
 
-    override suspend fun getDiaryEntryById(id: Int): DiaryEntry {
+    override suspend fun getDiaryEntryById(token: String, id: Int): DiaryEntry {
         return diaryEntries.find { it.id == id }
             ?: throw NoSuchElementException("No diary entry found with id $id")
     }
 
-    override suspend fun deleteDiaryEntry(id: Int) {
+    override suspend fun deleteDiaryEntry(token: String, id: Int) {
         val entryToRemove = diaryEntries.find { it.id == id }
         if (entryToRemove != null) {
             diaryEntries.remove(entryToRemove)

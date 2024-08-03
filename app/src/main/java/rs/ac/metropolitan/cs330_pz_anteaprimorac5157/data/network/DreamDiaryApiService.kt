@@ -16,14 +16,14 @@ interface DreamDiaryApiService {
     suspend fun checkAuthentication(@Header("Authorization") token: String): AuthenticationResponse
 
     @GET("api/v1/diary")
-    suspend fun getDiaryEntries(): List<DiaryEntry>
+    suspend fun getDiaryEntries(@Header("Authorization") token: String): List<DiaryEntry>
 
     @GET("api/v1/diary/{id}")
-    suspend fun getDiaryEntryById(@Path("id") id: Int): DiaryEntry
+    suspend fun getDiaryEntryById(@Header("Authorization") token: String, @Path("id") id: Int): DiaryEntry
 
     @POST("api/v1/diary")
-    suspend fun createDiaryEntry(@Body entry: CreateDiaryEntryRequest): DiaryEntry
+    suspend fun createDiaryEntry(@Header("Authorization") token: String, @Body entry: CreateDiaryEntryRequest): DiaryEntry
 
     @DELETE("api/v1/diary/{id}")
-    suspend fun deleteDiaryEntry(@Path("id") id: Int): Response<Unit>
+    suspend fun deleteDiaryEntry(@Header("Authorization") token: String, @Path("id") id: Int): Response<Unit>
 }

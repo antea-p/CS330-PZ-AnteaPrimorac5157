@@ -25,6 +25,7 @@ class DiaryViewModelImpl @Inject constructor(
 
     init {
         viewModelScope.launch {
+            authService.checkAuthentication()
             authService.getUsername().collect { username ->
                 if (username != null) {
                     //logAppOpen()
@@ -47,8 +48,10 @@ class DiaryViewModelImpl @Inject constructor(
     override fun loadDiaryEntries() {
         viewModelScope.launch {
             _uiState.value = DiaryUiState.Loading
+            // TODO: provjeriti status tokena
             try {
-                val entriesDeferred = async { dreamDiaryRepository.getDiaryEntries().first() }
+                // !! jer znamo da je korisnik ulogiran
+                val entriesDeferred = async { dreamDiaryRepository.getDiaryEntries(authService.getToken().first()!!).first() }
                 val lastOpenedDeferred = async { activityLogService.getLastLoggedDate().first() }
 
                 val entries = entriesDeferred.await()
@@ -65,7 +68,7 @@ class DiaryViewModelImpl @Inject constructor(
     override fun createDiaryEntry(title: String, content: String) {
         viewModelScope.launch {
             try {
-                dreamDiaryRepository.createDiaryEntry(title, content)
+                dreamDiaryRepository.createDiaryEntry(authService.getToken().first()!!, title, content)
                 loadDiaryEntries()
             } catch (e: Exception) {
                 _uiState.value = DiaryUiState.Error("Failed to create diary entry: ${e.message}")

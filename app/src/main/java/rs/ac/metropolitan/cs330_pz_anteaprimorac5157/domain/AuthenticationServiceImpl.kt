@@ -15,6 +15,9 @@ class AuthenticationServiceImpl @Inject constructor(
     override suspend fun getUsername(): Flow<String?> =
         authRepository.find().map { it?.username }
 
+    override suspend fun getToken(): Flow<String?> =
+        authRepository.find().map { it?.token }
+
     override suspend fun login(username: String, password: String) {
         val loginResponse = authRepository.login(username, password)
         authRepository.save(Authentication(loginResponse.token, username))

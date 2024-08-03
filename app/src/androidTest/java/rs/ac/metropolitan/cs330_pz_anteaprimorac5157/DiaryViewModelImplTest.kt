@@ -28,6 +28,7 @@ class DiaryViewModelImplTest {
     private lateinit var fakeAuthService: FakeAuthenticationService
     private lateinit var fakeActivityLogService: FakeActivityLogService
     private val testDispatcher = StandardTestDispatcher()
+    private var JWT_TOKEN: String = "fake-token"
 
     @Before
     fun setup() {
@@ -73,7 +74,7 @@ class DiaryViewModelImplTest {
     fun `loadDiaryEntries updates state to Success when entries are loaded`() = runTest {
         // Given
         fakeAuthService.login("testUser", "testPassword")
-        fakeDiaryRepository.createDiaryEntry("Test Title", "Test Content")
+        fakeDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content")
 
         // When
         viewModel.loadDiaryEntries()
@@ -134,7 +135,7 @@ class DiaryViewModelImplTest {
         // Given
         fakeAuthService.login("testUser", "testPassword")
         fakeActivityLogService.shouldThrowException = true
-        fakeDiaryRepository.createDiaryEntry("Test Title", "Test Content")
+        fakeDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content")
 
         // When
         viewModel = DiaryViewModelImpl(fakeDiaryRepository, fakeAuthService, fakeActivityLogService)

@@ -1,9 +1,11 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository
 
+import android.util.Log
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApiService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.DiaryEntry
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.CreateDiaryEntryRequest
 import javax.inject.Inject
 
@@ -11,26 +13,35 @@ class DreamDiaryRepositoryImpl @Inject constructor(
     private val apiService: DreamDiaryApiService
 ) : DreamDiaryRepository {
 
-    override fun getDiaryEntries(): Flow<List<DiaryEntry>> = flow {
-        val entries = apiService.getDiaryEntries().map { it.toDomain() }
+    override fun getDiaryEntries(token: String): Flow<List<DiaryEntry>> = flow {
+        val  entries = apiService.getDiaryEntries("Bearer $token").map { it.toDomain() }
         emit(entries)
     }
 
     // TODO: tags, emotions
-    override suspend fun createDiaryEntry(title: String, content: String): DiaryEntry {
+    override suspend fun createDiaryEntry(token: String, title: String, content: String): DiaryEntry {
         val request = CreateDiaryEntryRequest(title, content, emptyList(), emptyList())
-        return apiService.createDiaryEntry(request).toDomain()
+        return apiService.createDiaryEntry(token, request).toDomain()
     }
 
     // TODO
-    override suspend fun getDiaryEntryById(id: Int): DiaryEntry {
-        return apiService.getDiaryEntryById(id).toDomain()
+    override suspend fun getDiaryEntryById(token: String, id: Int): DiaryEntry {
+        try {
+            val response = apiService.getDiaryEntryById("Bearer $token", id)
+            return response.toDomain()
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
-    override suspend fun deleteDiaryEntry(id: Int) {
-        val response = apiService.deleteDiaryEntry(id)
-        if (!response.isSuccessful) {
-            throw Exception("Failed to delete entry: ${response.message()}")
+    override suspend fun deleteDiaryEntry(token: String, id: Int) {
+        try {
+            val response = apiService.deleteDiaryEntry("Bearer $token", id)
+//            if (!response.isSuccessful) {
+//                throw Exception("Failed to delete entry: ${response.message()}")
+//            }
+        } catch (e: Exception) {
+            throw e
         }
     }
 

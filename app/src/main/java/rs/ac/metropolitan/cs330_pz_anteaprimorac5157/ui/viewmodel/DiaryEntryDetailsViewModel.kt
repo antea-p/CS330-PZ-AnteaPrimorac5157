@@ -10,6 +10,7 @@ sealed class DiaryEntryDetailsUiState {
     data class Success(val entry: DiaryEntry) : DiaryEntryDetailsUiState()
     data class Error(val message: String) : DiaryEntryDetailsUiState()
     object Deleted : DiaryEntryDetailsUiState()
+    object LoggedOut : DiaryEntryDetailsUiState()
 }
 
 interface DiaryEntryDetailsViewModel {

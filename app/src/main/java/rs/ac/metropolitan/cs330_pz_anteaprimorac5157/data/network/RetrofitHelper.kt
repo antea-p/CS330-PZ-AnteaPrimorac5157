@@ -15,7 +15,7 @@ class RetrofitHelperImpl : RetrofitHelper {
         return getInstance().create(DreamDiaryApiService::class.java)
     }
 
-    private val gson = GsonBuilder().create()
+    private val gson = GsonBuilder().setLenient().setPrettyPrinting().create()
     private fun getInstance(): Retrofit {
         return Retrofit.Builder()
             .client(

@@ -3,11 +3,13 @@ package rs.ac.metropolitan.cs330_pz_anteaprimorac5157
 import androidx.compose.foundation.layout.PaddingValues
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import retrofit2.HttpException
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.CreateDiaryEntryRequest
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepositoryImpl
 
@@ -19,6 +21,7 @@ class DreamDiaryRepositoryImplTest {
 
     private lateinit var fakeDreamDiaryApiService: FakeDreamDiaryApiService
     private lateinit var repository: DreamDiaryRepositoryImpl
+    private var JWT_TOKEN: String = "Bearer fake-token"
 
     @Before
     fun setup() {
@@ -31,11 +34,11 @@ class DreamDiaryRepositoryImplTest {
         // Given
         val entry1 = CreateDiaryEntryRequest("Title 1", "Content 1", emptyList(), emptyList())
         val entry2 = CreateDiaryEntryRequest("Title 2", "Content 2", emptyList(), emptyList())
-        fakeDreamDiaryApiService.createDiaryEntry(entry1)
-        fakeDreamDiaryApiService.createDiaryEntry(entry2)
+        fakeDreamDiaryApiService.createDiaryEntry(JWT_TOKEN, entry1)
+        fakeDreamDiaryApiService.createDiaryEntry(JWT_TOKEN, entry2)
 
         // When
-        val result = repository.getDiaryEntries().first()
+        val result = repository.getDiaryEntries(JWT_TOKEN).first()
 
         // Then
         assertEquals(2, result.size)
@@ -51,7 +54,7 @@ class DreamDiaryRepositoryImplTest {
         // When & Then
         assertThrows(Exception::class.java) {
             runTest {
-                repository.getDiaryEntries().first()
+                repository.getDiaryEntries(JWT_TOKEN).first()
             }
         }
     }
@@ -63,7 +66,7 @@ class DreamDiaryRepositoryImplTest {
         val content = "New Content"
 
         // When
-        val result = repository.createDiaryEntry(title, content)
+        val result = repository.createDiaryEntry(JWT_TOKEN, title, content)
 
         // Then
         assertEquals(title, result.title)
@@ -79,7 +82,7 @@ class DreamDiaryRepositoryImplTest {
         // When & Then
         assertThrows(Exception::class.java) {
             runTest {
-                repository.createDiaryEntry("Title", "Content")
+                repository.createDiaryEntry(JWT_TOKEN, "Title", "Content")
             }
         }
     }
@@ -88,10 +91,10 @@ class DreamDiaryRepositoryImplTest {
     fun `getDiaryEntryById returns correct entry`() = runTest {
         // Given
         val entry = CreateDiaryEntryRequest("Title", "Content", emptyList(), emptyList())
-        fakeDreamDiaryApiService.createDiaryEntry(entry)
+        fakeDreamDiaryApiService.createDiaryEntry(JWT_TOKEN, entry)
 
         // When
-        val result = repository.getDiaryEntryById(1)
+        val result = repository.getDiaryEntryById(JWT_TOKEN, 1)
 
         // Then
         assertEquals("Title", result.title)
@@ -99,30 +102,30 @@ class DreamDiaryRepositoryImplTest {
         assertEquals(1, result.id)
     }
 
-    // TODO
-//    @Test
-//    fun `getDiaryEntryById throws exception when entry not found`() = runTest {
-//        // When & Then
-//        assertThrows(NoSuchElementException::class.java) {
-//            runTest {
-//                repository.getDiaryEntryById(999)
-//            }
-//        }
-//    }
+    @Test
+    fun `getDiaryEntryById throws Exception in case of other exceptions`() = runTest {
+        // When & Then
+        fakeDreamDiaryApiService.setShouldThrowError(true)
+        assertThrows(Exception::class.java) {
+            runTest {
+                repository.getDiaryEntryById(JWT_TOKEN, 999)
+            }
+        }
+    }
 
     @Test
     fun `deleteDiaryEntry deletes entry successfully`() = runTest {
         // Given
         val entry = CreateDiaryEntryRequest("Title", "Content", emptyList(), emptyList())
-        val createdEntry = fakeDreamDiaryApiService.createDiaryEntry(entry)
+        val createdEntry = fakeDreamDiaryApiService.createDiaryEntry(JWT_TOKEN, entry)
 
         // When
-        repository.deleteDiaryEntry(createdEntry.id)
+        repository.deleteDiaryEntry(JWT_TOKEN, createdEntry.id)
 
         // Then
         assertThrows(Exception::class.java) {
             runTest {
-                repository.getDiaryEntryById(createdEntry.id)
+                repository.getDiaryEntryById(JWT_TOKEN, createdEntry.id)
             }
         }
     }
@@ -130,11 +133,13 @@ class DreamDiaryRepositoryImplTest {
     @Test
     fun `deleteDiaryEntry throws exception when entry not found`() = runTest {
         // When & Then
+        fakeDreamDiaryApiService.setShouldThrowError(true)
         assertThrows(Exception::class.java) {
             runTest {
-                repository.deleteDiaryEntry(999)
+                repository.deleteDiaryEntry(JWT_TOKEN, 999)
             }
         }
     }
+
 
 }

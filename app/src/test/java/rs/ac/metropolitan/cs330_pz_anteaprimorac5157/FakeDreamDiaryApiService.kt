@@ -1,6 +1,7 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157
 
 import okhttp3.ResponseBody
+import retrofit2.HttpException
 import retrofit2.Response
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.AuthenticationResponse
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.CreateDiaryEntryRequest
@@ -12,9 +13,20 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.LoginResponse
 class FakeDreamDiaryApiService : DreamDiaryApiService {
     private val diaryEntries = mutableListOf<DiaryEntry>()
     private var shouldThrowError = false
+    private var shouldThrowHttpException = false
 
     fun setShouldThrowError(value: Boolean) {
         shouldThrowError = value
+        shouldThrowHttpException = false
+    }
+
+    private fun throwExceptionIfNeeded() {
+        when {
+            shouldThrowError -> throw Exception("Test exception")
+            shouldThrowHttpException -> throw HttpException(
+                Response.error<Any>(500, ResponseBody.create(null, "HTTP Exception"))
+            )
+        }
     }
 
     override suspend fun login(request: LoginRequest): LoginResponse {
@@ -26,18 +38,19 @@ class FakeDreamDiaryApiService : DreamDiaryApiService {
     }
 
 
-    override suspend fun getDiaryEntries(): List<DiaryEntry> {
-        if (shouldThrowError) throw Exception("Test exception")
+    override suspend fun getDiaryEntries(token: String): List<DiaryEntry> {
+        throwExceptionIfNeeded()
         return diaryEntries
     }
 
-    override suspend fun getDiaryEntryById(id: Int): DiaryEntry {
-        if (shouldThrowError) throw Exception("Test exception")
-        return diaryEntries.find { it.id == id } ?: throw NoSuchElementException("No entry found with id $id")
+    override suspend fun getDiaryEntryById(token: String, id: Int): DiaryEntry {
+        throwExceptionIfNeeded()
+        return diaryEntries.find { it.id == id }
+            ?: throw NoSuchElementException("No entry found with id $id")
     }
 
-    override suspend fun createDiaryEntry(entry: CreateDiaryEntryRequest): DiaryEntry {
-        if (shouldThrowError) throw Exception("Test exception")
+    override suspend fun createDiaryEntry(token: String, entry: CreateDiaryEntryRequest): DiaryEntry {
+        throwExceptionIfNeeded()
         val newEntry = DiaryEntry(
             id = diaryEntries.size + 1,
             title = entry.title,
@@ -50,8 +63,8 @@ class FakeDreamDiaryApiService : DreamDiaryApiService {
         return newEntry
     }
 
-    override suspend fun deleteDiaryEntry(id: Int): Response<Unit> {
-        if (shouldThrowError) throw Exception("Test exception")
+    override suspend fun deleteDiaryEntry(token: String, id: Int): Response<Unit> {
+        throwExceptionIfNeeded()
         val entryIndex = diaryEntries.indexOfFirst { it.id == id }
         return if (entryIndex != -1) {
             diaryEntries.removeAt(entryIndex)
@@ -61,4 +74,9 @@ class FakeDreamDiaryApiService : DreamDiaryApiService {
         }
     }
 
+    fun clear() {
+        diaryEntries.clear()
+        shouldThrowError = false
+        shouldThrowHttpException = false
+    }
 }

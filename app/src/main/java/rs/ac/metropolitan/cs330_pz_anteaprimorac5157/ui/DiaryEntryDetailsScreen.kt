@@ -61,12 +61,20 @@ fun DiaryEntryDetailsScreen(
                     entry = state.entry,
                     onDelete = { viewModel.deleteDiaryEntry(state.entry.id) }
                 )
-                is DiaryEntryDetailsUiState.Error -> Text("Error: ${state.message}")
+                is DiaryEntryDetailsUiState.Error -> {
+                    Column {
+                        Text("Error: ${state.message}")
+                        Button(onClick = { viewModel.loadDiaryEntry(entryId) }) {
+                            Text("Retry")
+                        }
+                    }
+                }
                 is DiaryEntryDetailsUiState.Deleted -> {
                     LaunchedEffect(Unit) {
                         onNavigateBack()
                     }
                 }
+                DiaryEntryDetailsUiState.LoggedOut -> LoggedOutScreen()
             }
         }
     }

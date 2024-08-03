@@ -19,6 +19,7 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Tag
 class ApiClientTest {
     private lateinit var mockWebServer: MockWebServer
     private lateinit var api: DreamDiaryApiService
+    private var JWT_TOKEN: String = "fake-token"
 
     @Before
     fun setup() {
@@ -47,7 +48,7 @@ class ApiClientTest {
             .setResponseCode(200)
             .setBody("""
                 {
-                    "token": "$expectedToken",
+                    "token": "$JWT_TOKEN",
                     "message": "Login successful"
                 }
             """.trimIndent())
@@ -57,7 +58,7 @@ class ApiClientTest {
         val response = api.login(LoginRequest("omori", "password"))
 
         // Then
-        assertEquals(expectedToken, response.token)
+        assertEquals(JWT_TOKEN, response.token)
         assertEquals("Login successful", response.message)
 
         val request = mockWebServer.takeRequest()
@@ -81,7 +82,7 @@ class ApiClientTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val response = api.checkAuthentication("Bearer fake-jwt-token")
+        val response = api.checkAuthentication("Bearer $JWT_TOKEN")
 
         // Then
         assertTrue(response.authenticated)
@@ -89,7 +90,7 @@ class ApiClientTest {
         val request = mockWebServer.takeRequest()
         assertEquals("GET", request.method)
         assertEquals("/api/v1/auth/check", request.path)
-        assertEquals("Bearer fake-jwt-token", request.getHeader("Authorization"))
+        assertEquals("Bearer $JWT_TOKEN", request.getHeader("Authorization"))
     }
 
     @Test
@@ -113,7 +114,7 @@ class ApiClientTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val entries = api.getDiaryEntries()
+        val entries = api.getDiaryEntries("Bearer $JWT_TOKEN")
 
         // Then
         assertEquals(1, entries.size)
@@ -125,6 +126,7 @@ class ApiClientTest {
         val request = mockWebServer.takeRequest()
         assertEquals("GET", request.method)
         assertEquals("/api/v1/diary", request.path)
+        assertEquals("Bearer $JWT_TOKEN", request.getHeader("Authorization"))
     }
 
     @Test
@@ -146,7 +148,7 @@ class ApiClientTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val entry = api.getDiaryEntryById(1)
+        val entry = api.getDiaryEntryById("Bearer $JWT_TOKEN", 1)
 
         // Then
         assertEquals(1, entry.id)
@@ -156,6 +158,7 @@ class ApiClientTest {
         val request = mockWebServer.takeRequest()
         assertEquals("GET", request.method)
         assertEquals("/api/v1/diary/1", request.path)
+        assertEquals("Bearer $JWT_TOKEN", request.getHeader("Authorization"))
     }
 
     @Test
@@ -177,7 +180,7 @@ class ApiClientTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
+        val newEntry = api.createDiaryEntry("Bearer $JWT_TOKEN", CreateDiaryEntryRequest(
             "New Entry",
             "This is a new entry",
             emptyList(),
@@ -192,6 +195,8 @@ class ApiClientTest {
         val request = mockWebServer.takeRequest()
         assertEquals("POST", request.method)
         assertEquals("/api/v1/diary", request.path)
+        assertEquals("Bearer $JWT_TOKEN", request.getHeader("Authorization"))
+
         val requestBody = request.body.readUtf8()
         assertTrue(requestBody.contains("\"title\":\"New Entry\""))
         assertTrue(requestBody.contains("\"content\":\"This is a new entry\""))
@@ -218,7 +223,7 @@ class ApiClientTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
+        val newEntry = api.createDiaryEntry("Bearer $JWT_TOKEN", CreateDiaryEntryRequest(
             "New Entry",
             "This is a new entry",
             listOf(Tag(1, "Test")),
@@ -235,6 +240,8 @@ class ApiClientTest {
         val request = mockWebServer.takeRequest()
         assertEquals("POST", request.method)
         assertEquals("/api/v1/diary", request.path)
+        assertEquals("Bearer $JWT_TOKEN", request.getHeader("Authorization"))
+
         val requestBody = request.body.readUtf8()
         assertTrue(requestBody.contains("\"title\":\"New Entry\""))
         assertTrue(requestBody.contains("\"content\":\"This is a new entry\""))
@@ -261,7 +268,7 @@ class ApiClientTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
+        val newEntry = api.createDiaryEntry("Bearer $JWT_TOKEN", CreateDiaryEntryRequest(
             "Emotional Entry",
             "This is an emotional entry",
             emptyList(),
@@ -278,6 +285,8 @@ class ApiClientTest {
         val request = mockWebServer.takeRequest()
         assertEquals("POST", request.method)
         assertEquals("/api/v1/diary", request.path)
+        assertEquals("Bearer $JWT_TOKEN", request.getHeader("Authorization"))
+
         val requestBody = request.body.readUtf8()
         assertTrue(requestBody.contains("\"title\":\"Emotional Entry\""))
         assertTrue(requestBody.contains("\"content\":\"This is an emotional entry\""))
@@ -304,7 +313,7 @@ class ApiClientTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val newEntry = api.createDiaryEntry(CreateDiaryEntryRequest(
+        val newEntry = api.createDiaryEntry("Bearer $JWT_TOKEN", CreateDiaryEntryRequest(
             "Complex Entry",
             "This is a complex entry",
             listOf(Tag(1, "Important"), Tag(2, "Work")),
@@ -321,6 +330,8 @@ class ApiClientTest {
         val request = mockWebServer.takeRequest()
         assertEquals("POST", request.method)
         assertEquals("/api/v1/diary", request.path)
+        assertEquals("Bearer $JWT_TOKEN", request.getHeader("Authorization"))
+
         val requestBody = request.body.readUtf8()
         assertTrue(requestBody.contains("\"title\":\"Complex Entry\""))
         assertTrue(requestBody.contains("\"content\":\"This is a complex entry\""))
@@ -335,7 +346,7 @@ class ApiClientTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val response = api.deleteDiaryEntry(1)
+        val response = api.deleteDiaryEntry("Bearer $JWT_TOKEN", 1)
 
         // Then
         assertTrue(response.isSuccessful)
@@ -344,5 +355,6 @@ class ApiClientTest {
         val request = mockWebServer.takeRequest()
         assertEquals("DELETE", request.method)
         assertEquals("/api/v1/diary/1", request.path)
+        assertEquals("Bearer $JWT_TOKEN", request.getHeader("Authorization"))
     }
 }

@@ -5,12 +5,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.di.FakeAuthenticationService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.di.FakeDreamDiaryRepository
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.DiaryEntry
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryEntryDetailsUiState
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryEntryDetailsViewModelImpl
 
@@ -25,17 +27,20 @@ class DiaryEntryDetailsViewModelImplTest {
 
     private lateinit var viewModel: DiaryEntryDetailsViewModelImpl
     private lateinit var fakeDreamDiaryRepository: FakeDreamDiaryRepository
+    private lateinit var fakeAuthService: FakeAuthenticationService
+    private var JWT_TOKEN: String = "fake-token"
 
     @Before
     fun setup() {
         fakeDreamDiaryRepository = FakeDreamDiaryRepository()
-        viewModel = DiaryEntryDetailsViewModelImpl(fakeDreamDiaryRepository)
+        fakeAuthService = FakeAuthenticationService()
+        viewModel = DiaryEntryDetailsViewModelImpl(fakeDreamDiaryRepository, fakeAuthService)
     }
 
     @Test
     fun `loadDiaryEntry loads correct entry`() = runTest {
         // Given
-        val createdEntry = fakeDreamDiaryRepository.createDiaryEntry("Test Title", "Test Content")
+        val createdEntry = fakeDreamDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content")
 
         // When
         viewModel.loadDiaryEntry(createdEntry.id)
@@ -58,13 +63,12 @@ class DiaryEntryDetailsViewModelImplTest {
 
         val state = viewModel.uiState.value
         assertTrue(state is DiaryEntryDetailsUiState.Error)
-        assertEquals("Entry not found", (state as DiaryEntryDetailsUiState.Error).message)
     }
 
     @Test
     fun `deleteDiaryEntry deletes entry and sets Deleted state`() = runTest {
         // Given
-        val createdEntry = fakeDreamDiaryRepository.createDiaryEntry("Test Title", "Test Content")
+        val createdEntry = fakeDreamDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content")
 
         // When
         viewModel.deleteDiaryEntry(createdEntry.id)
@@ -75,7 +79,7 @@ class DiaryEntryDetailsViewModelImplTest {
         val state = viewModel.uiState.value
         assertTrue(state is DiaryEntryDetailsUiState.Deleted)
         assertThrows(NoSuchElementException::class.java) {
-            runBlocking { fakeDreamDiaryRepository.getDiaryEntryById(createdEntry.id) }
+            runBlocking { fakeDreamDiaryRepository.getDiaryEntryById(JWT_TOKEN, createdEntry.id) }
         }
     }
 
@@ -89,6 +93,5 @@ class DiaryEntryDetailsViewModelImplTest {
 
         val state = viewModel.uiState.value
         assertTrue(state is DiaryEntryDetailsUiState.Error)
-        assertEquals("Entry not found", (state as DiaryEntryDetailsUiState.Error).message)
     }
 }

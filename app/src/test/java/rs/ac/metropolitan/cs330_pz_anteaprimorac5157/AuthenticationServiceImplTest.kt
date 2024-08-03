@@ -43,6 +43,27 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
+    fun `getToken returns token when authenticated and token is valid`() = runTest {
+        // Given
+        authRepository.save(Authentication("valid_token", "testUser"))
+
+        // When
+        val result = authService.getToken().first()
+
+        // Then
+        assertEquals("valid_token", result)
+    }
+
+    @Test
+    fun `getToken returns null when not authenticated`() = runTest {
+        // When
+        val result = authService.getToken().first()
+
+        // Then
+        assertNull(result)
+    }
+
+    @Test
     fun `login saves authentication`() = runTest {
         // When
         authService.login("testUser", "testPassword")
