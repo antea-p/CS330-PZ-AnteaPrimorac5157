@@ -226,7 +226,7 @@ class ApiClientTest {
         val newEntry = api.createDiaryEntry("Bearer $JWT_TOKEN", CreateDiaryEntryRequest(
             "New Entry",
             "This is a new entry",
-            listOf(Tag(1, "Test")),
+            listOf(Tag("Test")),
             emptyList()
         ))
 
@@ -245,7 +245,7 @@ class ApiClientTest {
         val requestBody = request.body.readUtf8()
         assertTrue(requestBody.contains("\"title\":\"New Entry\""))
         assertTrue(requestBody.contains("\"content\":\"This is a new entry\""))
-        assertTrue(requestBody.contains("\"tags\":[{\"id\":1,\"name\":\"Test\"}]"))
+        assertTrue(requestBody.contains("\"tags\":[{\"name\":\"Test\"}]"))
         assertTrue(requestBody.contains("\"emotions\":[]"))
     }
 
@@ -316,7 +316,7 @@ class ApiClientTest {
         val newEntry = api.createDiaryEntry("Bearer $JWT_TOKEN", CreateDiaryEntryRequest(
             "Complex Entry",
             "This is a complex entry",
-            listOf(Tag(1, "Important"), Tag(2, "Work")),
+            listOf(Tag("Important"), Tag("Work")),
             listOf(Emotion(1, "Happy"), Emotion(2, "Excited"))
         ))
 
@@ -335,7 +335,7 @@ class ApiClientTest {
         val requestBody = request.body.readUtf8()
         assertTrue(requestBody.contains("\"title\":\"Complex Entry\""))
         assertTrue(requestBody.contains("\"content\":\"This is a complex entry\""))
-        assertTrue(requestBody.contains("\"tags\":[{\"id\":1,\"name\":\"Important\"},{\"id\":2,\"name\":\"Work\"}]"))
+        assertTrue(requestBody.contains("\"tags\":[{\"name\":\"Important\"},{\"name\":\"Work\"}]"))
         assertTrue(requestBody.contains("\"emotions\":[{\"id\":1,\"name\":\"Happy\"},{\"id\":2,\"name\":\"Excited\"}]"))
     }
 

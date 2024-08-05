@@ -48,7 +48,6 @@ class DiaryViewModelImpl @Inject constructor(
     override fun loadDiaryEntries() {
         viewModelScope.launch {
             _uiState.value = DiaryUiState.Loading
-            // TODO: provjeriti status tokena
             try {
                 // !! jer znamo da je korisnik ulogiran
                 val entriesDeferred = async { dreamDiaryRepository.getDiaryEntries(authService.getToken().first()!!).first() }

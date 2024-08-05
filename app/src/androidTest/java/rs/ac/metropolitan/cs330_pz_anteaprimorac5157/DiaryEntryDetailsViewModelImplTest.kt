@@ -40,7 +40,7 @@ class DiaryEntryDetailsViewModelImplTest {
     @Test
     fun `loadDiaryEntry loads correct entry`() = runTest {
         // Given
-        val createdEntry = fakeDreamDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content")
+        val createdEntry = fakeDreamDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content", listOf(), listOf())
 
         // When
         viewModel.loadDiaryEntry(createdEntry.id)
@@ -68,7 +68,7 @@ class DiaryEntryDetailsViewModelImplTest {
     @Test
     fun `deleteDiaryEntry deletes entry and sets Deleted state`() = runTest {
         // Given
-        val createdEntry = fakeDreamDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content")
+        val createdEntry = fakeDreamDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content", listOf(), listOf())
 
         // When
         viewModel.deleteDiaryEntry(createdEntry.id)

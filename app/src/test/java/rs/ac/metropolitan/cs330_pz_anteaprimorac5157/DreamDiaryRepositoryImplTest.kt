@@ -1,6 +1,7 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.TextUnitType.Companion.Em
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -11,7 +12,10 @@ import org.junit.Rule
 import org.junit.Test
 import retrofit2.HttpException
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.CreateDiaryEntryRequest
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Emotion
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Tag
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepositoryImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
 
 @ExperimentalCoroutinesApi
 class DreamDiaryRepositoryImplTest {
@@ -60,17 +64,51 @@ class DreamDiaryRepositoryImplTest {
     }
 
     @Test
-    fun `createDiaryEntry creates and returns new entry`() = runTest {
+    fun `createDiaryEntry creates and returns new entry with title and content`() = runTest {
         // Given
         val title = "New Title"
         val content = "New Content"
 
         // When
-        val result = repository.createDiaryEntry(JWT_TOKEN, title, content)
+        val result = repository.createDiaryEntry(JWT_TOKEN, title, content, emptyList(), emptyList())
 
         // Then
         assertEquals(title, result.title)
         assertEquals(content, result.content)
+        assertEquals(1, result.id)
+    }
+
+    @Test
+    fun `createDiaryEntry creates and returns new entry with title, content and tags`() = runTest {
+        // Given
+        val title = "New Title"
+        val content = "New Content"
+        val tags = listOf("Stuff")
+
+        // When
+        val result = repository.createDiaryEntry(JWT_TOKEN, title, content, emptyList(), tags)
+
+        // Then
+        assertEquals(title, result.title)
+        assertEquals(content, result.content)
+        assertEquals(tags, result.tags)
+        assertEquals(1, result.id)
+    }
+
+    @Test
+    fun `createDiaryEntry creates and returns new entry with title, content and emotions`() = runTest {
+        // Given
+        val title = "New Title"
+        val content = "New Content"
+        val emotions = listOf(EmotionEnum.JOY)
+
+        // When
+        val result = repository.createDiaryEntry(JWT_TOKEN, title, content, emotions, emptyList())
+
+        // Then
+        assertEquals(title, result.title)
+        assertEquals(content, result.content)
+        assertEquals(listOf("joy"), result.emotions)
         assertEquals(1, result.id)
     }
 
@@ -82,7 +120,7 @@ class DreamDiaryRepositoryImplTest {
         // When & Then
         assertThrows(Exception::class.java) {
             runTest {
-                repository.createDiaryEntry(JWT_TOKEN, "Title", "Content")
+                repository.createDiaryEntry(JWT_TOKEN, "Title", "Content", emptyList(), emptyList())
             }
         }
     }

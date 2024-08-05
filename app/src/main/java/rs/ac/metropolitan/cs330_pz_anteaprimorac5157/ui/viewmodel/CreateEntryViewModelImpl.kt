@@ -1,5 +1,6 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,7 +19,7 @@ class CreateEntryViewModelImpl @Inject constructor(
     private val authService: AuthenticationService
 ) : ViewModel(), CreateEntryViewModel {
 
-    override val _uiState = MutableLiveData<CreateEntryUiState>(CreateEntryUiState.Initial)
+    override val _uiState = MutableLiveData<CreateEntryUiState>(CreateEntryUiState.Loading)
     override val uiState: LiveData<CreateEntryUiState> = _uiState
 
     init {
@@ -26,7 +28,7 @@ class CreateEntryViewModelImpl @Inject constructor(
             _uiState.value = if (username != null) {
                 CreateEntryUiState.Form(title = "", content = "", emotions = emptyList(), tags = emptyList())
             } else {
-                CreateEntryUiState.NotLoggedIn
+                CreateEntryUiState.LoggedOut
             }
         }
     }
@@ -39,16 +41,31 @@ class CreateEntryViewModelImpl @Inject constructor(
         updateFormState { it.copy(content = content) }
     }
 
-    override fun onEmotionChanged(emotion: String) {
-        updateFormState { it.copy(emotions = listOf(emotion)) }
+    override fun onEmotionChanged(emotion: EmotionEnum) {
+        updateFormState { currentState ->
+            val updatedEmotions = if (currentState.emotions.contains(emotion)) {
+                currentState.emotions - emotion
+            } else {
+                currentState.emotions + emotion
+            }
+            currentState.copy(emotions = updatedEmotions)
+        }
     }
 
     override fun onTagAdded(tag: String) {
-        updateFormState { it.copy(tags = it.tags + tag) }
+        updateFormState { currentState ->
+            val updatedTags = currentState.tags + tag
+            Log.d("CreateEntryViewModel", "Tag added: $tag, Current tags: $updatedTags")
+            currentState.copy(tags = updatedTags)
+        }
     }
 
     override fun onTagRemoved(tag: String) {
-        updateFormState { it.copy(tags = it.tags - tag) }
+        updateFormState { currentState ->
+            val updatedTags = currentState.tags - tag
+            Log.d("CreateEntryViewModel", "Tag removed: $tag, Current tags: $updatedTags")
+            currentState.copy(tags = updatedTags)
+        }
     }
 
     override fun onSubmit() {

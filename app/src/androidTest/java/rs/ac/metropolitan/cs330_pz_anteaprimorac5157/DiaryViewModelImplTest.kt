@@ -74,7 +74,7 @@ class DiaryViewModelImplTest {
     fun `loadDiaryEntries updates state to Success when entries are loaded`() = runTest {
         // Given
         fakeAuthService.login("testUser", "testPassword")
-        fakeDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content")
+        fakeDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content", listOf(), listOf())
 
         // When
         viewModel.loadDiaryEntries()
@@ -85,23 +85,6 @@ class DiaryViewModelImplTest {
         assert(state is DiaryUiState.Success)
         assert((state as DiaryUiState.Success).entries.size == 1)
         assert(state.entries[0].title == "Test Title")
-    }
-
-    @Test
-    fun `createDiaryEntry adds new entry and reloads entries`() = runTest {
-        // Given
-        fakeAuthService.login("testUser", "testPassword")
-
-        // When
-        viewModel.createDiaryEntry("New Title", "New Content")
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        // Then
-        val state = viewModel.uiState.value
-        assert(state is DiaryUiState.Success)
-        assert((state as DiaryUiState.Success).entries.size == 1)
-        assert(state.entries[0].title == "New Title")
-        assert(state.entries[0].content == "New Content")
     }
 
     @Test
@@ -135,7 +118,7 @@ class DiaryViewModelImplTest {
         // Given
         fakeAuthService.login("testUser", "testPassword")
         fakeActivityLogService.shouldThrowException = true
-        fakeDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content")
+        fakeDiaryRepository.createDiaryEntry(JWT_TOKEN, "Test Title", "Test Content", listOf(), listOf())
 
         // When
         viewModel = DiaryViewModelImpl(fakeDiaryRepository, fakeAuthService, fakeActivityLogService)

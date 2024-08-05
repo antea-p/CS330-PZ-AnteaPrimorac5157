@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.DiaryEntry
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
 
 class FakeDreamDiaryRepository : DreamDiaryRepository {
     private val diaryEntries = mutableListOf<DiaryEntry>()
@@ -11,14 +12,20 @@ class FakeDreamDiaryRepository : DreamDiaryRepository {
 
     override fun getDiaryEntries(token: String): Flow<List<DiaryEntry>> = flowOf(diaryEntries)
 
-    override suspend fun createDiaryEntry(token: String, title: String, content: String): DiaryEntry {
+    override suspend fun createDiaryEntry(
+        token: String,
+        title: String,
+        content: String,
+        emotions: List<EmotionEnum>,
+        tags: List<String>
+    ): DiaryEntry {
         val newEntry = DiaryEntry(
             id = nextId++,
             title = title,
             content = content,
             createdDate = "2023-08-01",
-            tags = listOf("Tag1"),
-            emotions = listOf("Emotion1")
+            emotions = emotions.map { it.name },
+            tags = tags
         )
         diaryEntries.add(newEntry)
         return newEntry

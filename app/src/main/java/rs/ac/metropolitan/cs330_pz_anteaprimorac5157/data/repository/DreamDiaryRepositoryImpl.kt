@@ -1,13 +1,14 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository
 
 import android.util.Log
+import androidx.compose.ui.text.toLowerCase
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApiService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.DiaryEntry
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import retrofit2.HttpException
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.CreateDiaryEntryRequest
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Emotion
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Tag
 import javax.inject.Inject
 
@@ -20,15 +21,19 @@ class DreamDiaryRepositoryImpl @Inject constructor(
         emit(entries)
     }
 
-    override suspend fun createDiaryEntry(token: String, title: String, content: String, emotions: List<String>, tags: List<String>): DiaryEntry {
+    override suspend fun createDiaryEntry(token: String, title: String, content: String, emotions: List<EmotionEnum>, tags: List<String>): DiaryEntry {
         val request = CreateDiaryEntryRequest(
             title = title,
             content = content,
-            emotions = emotions,
-            tags = tags
+            emotions = emotions.map { Emotion(id = it.ordinal + 1, name = it.name.lowercase()) },
+            tags = tags.map { Tag(name = it) }
         )
-        Log.d("DreamDiaryRepository", "Request: $request")
-        return apiService.createDiaryEntry("Bearer $token", request).toDomain()
+        try {
+            val response = apiService.createDiaryEntry("Bearer $token", request)
+            return response.toDomain()
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
     // TODO

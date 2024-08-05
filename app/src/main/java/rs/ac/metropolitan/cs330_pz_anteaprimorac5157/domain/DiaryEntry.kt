@@ -1,8 +1,7 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain
 
-// TODO: promjena tipa za emotions
-enum class Emotion {
-    HAPPY, SAD, ANGRY, EXCITED, NERVOUS, CALM, FRUSTRATED, CONTENT, ANXIOUS, NOSTALGIC
+enum class EmotionEnum {
+    NOSTALGIA, WONDER, JOY, FEAR, CURIOSITY, SHOCK, DETERMINATION, LONELINESS, HOPE
 }
 
 data class DiaryEntry(
