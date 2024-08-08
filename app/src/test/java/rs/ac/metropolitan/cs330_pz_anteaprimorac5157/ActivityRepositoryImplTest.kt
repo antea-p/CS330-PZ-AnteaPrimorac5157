@@ -8,7 +8,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.db.ActivityLogEntity
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.ActivityLogRepositoryImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.impl.ActivityLogRepositoryImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.fakes.FakeActivityLogDao
 import java.time.LocalDate
 
 @ExperimentalCoroutinesApi

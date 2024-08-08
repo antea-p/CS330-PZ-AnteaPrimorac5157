@@ -1,4 +1,4 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens
 
 
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +28,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.AccountUiState
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.AccountViewModel
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.AccountViewModelImpl
 
 @Composable
 fun AccountScreen(

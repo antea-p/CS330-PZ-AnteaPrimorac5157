@@ -15,7 +15,7 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.di.FakeAuthenticationServic
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.di.FakeDreamDiaryRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.CreateEntryUiState
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.CreateEntryViewModelImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.CreateEntryViewModelImpl
 
 @ExperimentalCoroutinesApi
 class CreateEntryViewModelImplTest {

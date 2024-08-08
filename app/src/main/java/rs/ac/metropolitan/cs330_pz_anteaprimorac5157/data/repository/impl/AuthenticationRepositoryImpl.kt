@@ -1,4 +1,4 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -6,6 +6,8 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.db.AuthenticationDao
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApiService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.LoginRequest
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.LoginResponse
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationMapper
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.Authentication
 import javax.inject.Inject
 

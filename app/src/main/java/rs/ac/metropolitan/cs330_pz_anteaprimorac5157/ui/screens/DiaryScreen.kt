@@ -1,4 +1,4 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -32,7 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.DiaryEntry
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryUiState
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryViewModel
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryViewModelImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.DiaryViewModelImpl
 
 @Composable
 fun DiaryScreen(

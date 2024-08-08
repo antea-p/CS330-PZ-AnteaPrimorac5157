@@ -11,10 +11,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.AccountScreen
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.CreateEntryScreen
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.DiaryScreen
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.DiaryEntryDetailsScreen
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens.AccountScreen
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens.CreateEntryScreen
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens.DiaryScreen
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens.DiaryEntryDetailsScreen
 
 @Composable
 fun NavSetup(

@@ -12,7 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.di.FakeCreateEntryViewModel
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.CreateEntryScreen
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens.CreateEntryScreen
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.CreateEntryUiState
 
 @RunWith(AndroidJUnit4::class)

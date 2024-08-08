@@ -1,4 +1,4 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.fakes
 
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.ActivityLogRepository
 

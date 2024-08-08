@@ -1,4 +1,4 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.fakes
 
 import okhttp3.ResponseBody
 import retrofit2.HttpException

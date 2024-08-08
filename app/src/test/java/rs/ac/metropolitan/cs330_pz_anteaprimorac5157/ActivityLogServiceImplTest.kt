@@ -7,7 +7,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.ActivityLogServiceImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.impl.ActivityLogServiceImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.fakes.FakeActivityLogRepository
 import java.time.LocalDate
 
 @ExperimentalCoroutinesApi

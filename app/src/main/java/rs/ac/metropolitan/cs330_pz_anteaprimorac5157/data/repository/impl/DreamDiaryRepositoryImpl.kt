@@ -1,7 +1,5 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.impl
 
-import android.util.Log
-import androidx.compose.ui.text.toLowerCase
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApiService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.DiaryEntry
 import kotlinx.coroutines.flow.Flow
@@ -10,6 +8,7 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.CreateDiaryEnt
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Emotion
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Tag
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepository
 import javax.inject.Inject
 
 class DreamDiaryRepositoryImpl @Inject constructor(

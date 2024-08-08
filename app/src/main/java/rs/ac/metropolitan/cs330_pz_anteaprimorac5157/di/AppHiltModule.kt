@@ -15,16 +15,16 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApiS
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.RetrofitHelper
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.RetrofitHelperImpl
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.ActivityLogRepository
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.ActivityLogRepositoryImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.impl.ActivityLogRepositoryImpl
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationMapper
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepository
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepositoryImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.impl.AuthenticationRepositoryImpl
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepository
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepositoryImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.impl.DreamDiaryRepositoryImpl
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.ActivityLogService
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.ActivityLogServiceImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.impl.ActivityLogServiceImpl
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationServiceImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.impl.AuthenticationServiceImpl
 import javax.inject.Singleton
 
 @Module

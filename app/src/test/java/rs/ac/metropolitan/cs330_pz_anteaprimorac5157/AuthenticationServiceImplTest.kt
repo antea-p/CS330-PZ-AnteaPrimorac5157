@@ -7,7 +7,8 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.Authentication
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationServiceImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.impl.AuthenticationServiceImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.fakes.FakeAuthenticationRepository
 
 @ExperimentalCoroutinesApi
 class AuthenticationServiceImplTest {

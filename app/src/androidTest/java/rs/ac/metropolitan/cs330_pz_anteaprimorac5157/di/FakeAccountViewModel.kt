@@ -1,10 +1,9 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.di
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.AccountUiState
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.AccountViewModel
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.AccountUiState
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.AccountViewModel
 
 class FakeAccountViewModel: AccountViewModel {
     private val _uiState = MutableLiveData<AccountUiState>(AccountUiState.Loading)

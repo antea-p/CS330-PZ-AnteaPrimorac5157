@@ -1,4 +1,4 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +10,8 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryEntryDetailsUiState
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryEntryDetailsViewModel
 import javax.inject.Inject
 
 @HiltViewModel

@@ -14,8 +14,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.AccountUiState
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.AccountViewModelImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.AccountUiState
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.AccountViewModelImpl
 import javax.inject.Inject
 
 @HiltAndroidTest

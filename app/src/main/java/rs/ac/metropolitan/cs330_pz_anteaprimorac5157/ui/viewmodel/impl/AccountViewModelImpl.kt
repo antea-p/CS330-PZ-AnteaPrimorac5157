@@ -1,4 +1,4 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,9 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepository
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.Authentication
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.AccountViewModel
 import javax.inject.Inject
 
 sealed class AccountUiState {

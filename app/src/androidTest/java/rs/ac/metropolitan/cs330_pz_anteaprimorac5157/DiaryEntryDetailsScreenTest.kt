@@ -10,7 +10,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.di.FakeDiaryEntryDetailsViewModel
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.DiaryEntry
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.DiaryEntryDetailsScreen
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens.DiaryEntryDetailsScreen
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)

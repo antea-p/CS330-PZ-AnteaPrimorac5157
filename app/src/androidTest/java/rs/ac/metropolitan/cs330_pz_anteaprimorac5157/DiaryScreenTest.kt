@@ -14,7 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.DiaryScreen
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens.DiaryScreen
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)

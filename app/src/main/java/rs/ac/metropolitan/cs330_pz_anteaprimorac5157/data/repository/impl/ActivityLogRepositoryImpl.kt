@@ -1,8 +1,9 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.impl
 
 import kotlinx.coroutines.flow.Flow
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.db.ActivityLogDao
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.db.ActivityLogEntity
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.ActivityLogRepository
 import java.time.LocalDate
 import javax.inject.Inject
 

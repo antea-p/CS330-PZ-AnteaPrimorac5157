@@ -1,8 +1,9 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.ActivityLogRepository
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.ActivityLogService
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject

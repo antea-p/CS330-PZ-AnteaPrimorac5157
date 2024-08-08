@@ -1,4 +1,4 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -19,7 +19,7 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.theme.LightBlue
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.theme.LightPurple
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryEntryDetailsUiState
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryEntryDetailsViewModel
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryEntryDetailsViewModelImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.DiaryEntryDetailsViewModelImpl
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

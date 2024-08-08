@@ -1,4 +1,4 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -11,6 +11,8 @@ import kotlinx.coroutines.launch
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.CreateEntryUiState
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.CreateEntryViewModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +28,12 @@ class CreateEntryViewModelImpl @Inject constructor(
         viewModelScope.launch {
             val username = authService.getUsername().first()
             _uiState.value = if (username != null) {
-                CreateEntryUiState.Form(title = "", content = "", emotions = emptyList(), tags = emptyList())
+                CreateEntryUiState.Form(
+                    title = "",
+                    content = "",
+                    emotions = emptyList(),
+                    tags = emptyList()
+                )
             } else {
                 CreateEntryUiState.LoggedOut
             }

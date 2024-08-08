@@ -1,21 +1,16 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.ui.unit.TextUnitType.Companion.Em
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import retrofit2.HttpException
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.CreateDiaryEntryRequest
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Emotion
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Tag
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.DreamDiaryRepositoryImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.impl.DreamDiaryRepositoryImpl
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.fakes.FakeDreamDiaryApiService
 
 @ExperimentalCoroutinesApi
 class DreamDiaryRepositoryImplTest {

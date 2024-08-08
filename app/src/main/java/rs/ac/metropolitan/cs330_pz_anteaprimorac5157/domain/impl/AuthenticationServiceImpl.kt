@@ -1,9 +1,11 @@
-package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain
+package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepository
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.Authentication
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.AuthenticationService
 import javax.inject.Inject
 import javax.inject.Singleton
 

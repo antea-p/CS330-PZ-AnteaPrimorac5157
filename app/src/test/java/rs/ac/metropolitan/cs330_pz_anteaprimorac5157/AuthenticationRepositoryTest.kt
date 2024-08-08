@@ -22,7 +22,7 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApiS
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.LoginRequest
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.LoginResponse
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationMapper
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.AuthenticationRepositoryImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.repository.impl.AuthenticationRepositoryImpl
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.Authentication
 
 @ExperimentalCoroutinesApi

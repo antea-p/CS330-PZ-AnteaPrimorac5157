@@ -14,7 +14,7 @@ import org.junit.Test
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.di.FakeAuthenticationService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.di.FakeDreamDiaryRepository
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryEntryDetailsUiState
-import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryEntryDetailsViewModelImpl
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.DiaryEntryDetailsViewModelImpl
 
 @ExperimentalCoroutinesApi
 class DiaryEntryDetailsViewModelImplTest {
