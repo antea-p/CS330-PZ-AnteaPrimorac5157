@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
 
 sealed class CreateEntryUiState {
-    //object Initial : CreateEntryUiState()
     object LoggedOut : CreateEntryUiState()
     data class Form(
         val title: String,

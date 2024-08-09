@@ -1,5 +1,8 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
@@ -30,6 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.DiaryEntry
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.components.PulsingFloatingActionButton
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryUiState
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.DiaryViewModel
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.DiaryViewModelImpl
@@ -97,9 +102,8 @@ fun DiaryEntriesList(
 ) {
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
+            PulsingFloatingActionButton(
                 onClick = onCreateEntry,
-                modifier = Modifier.testTag("create_diary_entry_btn")
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Create new entry")
             }
@@ -128,8 +132,16 @@ fun DiaryEntriesList(
                         .fillMaxSize()
                         .testTag("diary_entries_list")
                 ) {
-                    items(entries) { entry ->
-                        DiaryEntryItem(entry = entry, onClick = { onEntryClick(entry.id) })
+                    itemsIndexed(entries) { index, entry ->
+                        AnimatedVisibility(
+                            visible = true,
+                            enter = slideInHorizontally(
+                                initialOffsetX = { fullWidth -> fullWidth },
+                                animationSpec = tween(durationMillis = 300, delayMillis = index * 50)
+                            )
+                        ) {
+                            DiaryEntryItem(entry = entry, onClick = { onEntryClick(entry.id) })
+                        }
                     }
                 }
             }

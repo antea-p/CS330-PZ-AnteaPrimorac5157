@@ -38,7 +38,6 @@ import javax.inject.Inject
         }
     }
 
-    // TODO: ocistiti kod
     override fun loadDiaryEntry(id: Int) {
         viewModelScope.launch {
             _uiState.value = DiaryEntryDetailsUiState.Loading

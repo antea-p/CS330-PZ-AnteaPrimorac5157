@@ -1,5 +1,7 @@
 package rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.screens
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +43,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.components.AnimatedButton
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.CreateEntryUiState
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.CreateEntryViewModel
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.CreateEntryViewModelImpl
@@ -117,7 +121,7 @@ fun CreateEntryForm(
             focusManager = focusManager
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(
+        AnimatedButton(
             onClick = onSubmit,
             enabled = (state.title.isNotBlank() && state.content.isNotBlank()),
             modifier = Modifier
@@ -143,15 +147,21 @@ fun EmotionSelector(
         ) {
             items(EmotionEnum.entries.toTypedArray()) { emotion ->
                 val isSelected = selectedEmotions.contains(emotion)
+                val backgroundColor by animateColorAsState(
+                    targetValue = if (isSelected) MaterialTheme.colorScheme.primaryContainer
+                    else MaterialTheme.colorScheme.surface,
+                    animationSpec = tween(durationMillis = 300)
+                )
                 FilterChip(
                     selected = isSelected,
-                    onClick = {
-                        onEmotionChanged(emotion)
-                    },
+                    onClick = { onEmotionChanged(emotion) },
                     label = { Text(emotion.name.lowercase()) },
                     modifier = Modifier
                         .padding(end = 8.dp)
-                        .testTag("emotion_${emotion.name}")
+                        .testTag("emotion_${emotion.name}"),
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = backgroundColor
+                    )
                 )
             }
         }
@@ -242,16 +252,6 @@ fun ChipItem(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun NotLoggedInMessage() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("You need to be logged in to create a new entry. Please log in and try again.")
     }
 }
 
