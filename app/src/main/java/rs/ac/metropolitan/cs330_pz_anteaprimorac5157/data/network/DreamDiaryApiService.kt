@@ -6,6 +6,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface DreamDiaryApiService {
@@ -23,6 +24,9 @@ interface DreamDiaryApiService {
 
     @POST("api/v1/diary")
     suspend fun createDiaryEntry(@Header("Authorization") token: String, @Body entry: CreateDiaryEntryRequest): DiaryEntry
+
+    @POST("api/v1/diary")
+    suspend fun updateDiaryEntry(@Header("Authorization") token: String, @Body entry: UpdateDiaryEntryRequest): DiaryEntry
 
     @DELETE("api/v1/diary/{id}")
     suspend fun deleteDiaryEntry(@Header("Authorization") token: String, @Path("id") id: Int): Response<Unit>

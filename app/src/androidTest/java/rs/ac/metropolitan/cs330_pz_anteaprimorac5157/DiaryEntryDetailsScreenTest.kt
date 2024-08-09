@@ -35,7 +35,8 @@ class DiaryEntryDetailsScreenTest {
             DiaryEntryDetailsScreen(
                 entryId = 1,
                 viewModel = viewModel,
-                onNavigateBack = {}
+                onNavigateBack = {},
+                onNavigateToEdit = {}
             )
         }
 
@@ -51,8 +52,8 @@ class DiaryEntryDetailsScreenTest {
             DiaryEntryDetailsScreen(
                 entryId = 1,
                 viewModel = viewModel,
-                onNavigateBack = {}
-            )
+                onNavigateBack = {},
+                onNavigateToEdit = {}            )
         }
 
         composeTestRule.onNodeWithTag("tags_row").assertDoesNotExist()
@@ -68,7 +69,8 @@ class DiaryEntryDetailsScreenTest {
             DiaryEntryDetailsScreen(
                 entryId = 1,
                 viewModel = viewModel,
-                onNavigateBack = {}
+                onNavigateBack = {},
+                onNavigateToEdit = {}
             )
         }
 
@@ -84,8 +86,8 @@ class DiaryEntryDetailsScreenTest {
             DiaryEntryDetailsScreen(
                 entryId = 1,
                 viewModel = viewModel,
-                onNavigateBack = {}
-            )
+                onNavigateBack = {},
+                onNavigateToEdit = {}            )
         }
 
         composeTestRule.onNodeWithTag("emotions_row").assertExists()
@@ -101,11 +103,31 @@ class DiaryEntryDetailsScreenTest {
             DiaryEntryDetailsScreen(
                 entryId = 1,
                 viewModel = viewModel,
-                onNavigateBack = { isBackCalled = true }
+                onNavigateBack = { isBackCalled = true },
+                onNavigateToEdit = {}
             )
         }
 
         composeTestRule.onNodeWithTag("back_button").performClick()
         assert(isBackCalled)
+    }
+
+    @Test
+    fun `test Edit button navigates to Edit Screen`() {
+        var navigatedToEditId: Int? = null
+        val entry = DiaryEntry(1, "Test Entry", "Content", "2023-01-01", emptyList(), emptyList())
+        viewModel.setDiaryEntry(entry)
+
+        composeTestRule.setContent {
+            DiaryEntryDetailsScreen(
+                entryId = 1,
+                viewModel = viewModel,
+                onNavigateBack = {},
+                onNavigateToEdit = { id -> navigatedToEditId = id }
+            )
+        }
+
+        composeTestRule.onNodeWithTag("edit_button").performClick()
+        assert(navigatedToEditId == 1)
     }
 }

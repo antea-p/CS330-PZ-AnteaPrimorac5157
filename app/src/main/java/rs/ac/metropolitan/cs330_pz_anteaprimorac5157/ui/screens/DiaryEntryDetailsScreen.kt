@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -27,7 +28,7 @@ fun DiaryEntryDetailsScreen(
     entryId: Int,
     viewModel: DiaryEntryDetailsViewModel = hiltViewModel<DiaryEntryDetailsViewModelImpl>(),
     onNavigateBack: () -> Unit,
-    //onEntryDeleted: () -> Unit
+    onNavigateToEdit: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.observeAsState(DiaryEntryDetailsUiState.Loading)
 
@@ -44,11 +45,15 @@ fun DiaryEntryDetailsScreen(
                         onClick = onNavigateBack,
                         modifier = Modifier.testTag("back_button")
                     ) {
-                        Icon(
-                            Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-
-                        )
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = { onNavigateToEdit(entryId) },
+                        modifier = Modifier.testTag("edit_button")
+                    ) {
+                        Icon(Icons.Default.Edit, contentDescription = "Edit")
                     }
                 }
             )

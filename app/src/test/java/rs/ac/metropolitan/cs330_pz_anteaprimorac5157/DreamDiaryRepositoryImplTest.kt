@@ -121,6 +121,52 @@ class DreamDiaryRepositoryImplTest {
     }
 
     @Test
+    fun `updateDiaryEntry updates and returns updated entry`() = runTest {
+        // Given
+        val entry = CreateDiaryEntryRequest("Original Title", "Original Content", emptyList(), emptyList())
+        val createdEntry = fakeDreamDiaryApiService.createDiaryEntry(JWT_TOKEN, entry)
+        val updatedTitle = "Updated Title"
+        val updatedContent = "Updated Content"
+        val updatedEmotions = listOf(EmotionEnum.JOY)
+        val updatedTags = listOf("UpdatedTag")
+
+        // When
+        val result = repository.updateDiaryEntry(JWT_TOKEN, createdEntry.id, updatedTitle, updatedContent, updatedEmotions, updatedTags)
+
+        // Then
+        assertEquals(createdEntry.id, result.id)
+        assertEquals(updatedTitle, result.title)
+        assertEquals(updatedContent, result.content)
+        assertEquals(updatedTags, result.tags)
+        assertEquals(updatedEmotions.map { it.name.lowercase() }, result.emotions)
+    }
+
+    @Test
+    fun `updateDiaryEntry throws exception when entry not found`() = runTest {
+        // When & Then
+        assertThrows(Exception::class.java) {
+            runTest {
+                repository.updateDiaryEntry(JWT_TOKEN, 999, "Title", "Content", emptyList(), emptyList())
+            }
+        }
+    }
+
+    @Test
+    fun `updateDiaryEntry throws exception when API fails`() = runTest {
+        // Given
+        val entry = CreateDiaryEntryRequest("Original Title", "Original Content", emptyList(), emptyList())
+        val createdEntry = fakeDreamDiaryApiService.createDiaryEntry(JWT_TOKEN, entry)
+        fakeDreamDiaryApiService.setShouldThrowError(true)
+
+        // When & Then
+        assertThrows(Exception::class.java) {
+            runTest {
+                repository.updateDiaryEntry(JWT_TOKEN, createdEntry.id, "Updated Title", "Updated Content", emptyList(), emptyList())
+            }
+        }
+    }
+
+    @Test
     fun `getDiaryEntryById returns correct entry`() = runTest {
         // Given
         val entry = CreateDiaryEntryRequest("Title", "Content", emptyList(), emptyList())

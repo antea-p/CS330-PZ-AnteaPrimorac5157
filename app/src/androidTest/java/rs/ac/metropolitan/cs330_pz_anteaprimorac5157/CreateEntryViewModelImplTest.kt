@@ -44,6 +44,8 @@ class CreateEntryViewModelImplTest {
     @Test
     fun `createDiaryEntry with title and content`() = runTest {
         // Given
+        viewModel.initialize(null)
+        advanceUntilIdle()
         viewModel.onTitleChanged("Test Title")
         viewModel.onContentChanged("Test Content")
 
@@ -64,6 +66,8 @@ class CreateEntryViewModelImplTest {
     @Test
     fun `createDiaryEntry with title content and tags`() = runTest {
         // Given
+        viewModel.initialize(null)
+        advanceUntilIdle()
         viewModel.onTitleChanged("Test Title")
         viewModel.onContentChanged("Test Content")
         viewModel.onTagAdded("Tag1")
@@ -86,6 +90,8 @@ class CreateEntryViewModelImplTest {
     @Test
     fun `createDiaryEntry with title content and emotions`() = runTest {
         // Given
+        viewModel.initialize(null)
+        advanceUntilIdle()
         viewModel.onTitleChanged("Test Title")
         viewModel.onContentChanged("Test Content")
         viewModel.onEmotionChanged(EmotionEnum.JOY)
@@ -103,5 +109,51 @@ class CreateEntryViewModelImplTest {
         assertEquals("Test Title", entries[0].title)
         assertEquals("Test Content", entries[0].content)
         assertEquals(listOf("JOY", "CURIOSITY"), entries[0].emotions)
+    }
+
+    @Test
+    fun `load existing entry`() = runTest {
+        // Given
+        val existingEntry = fakeDreamDiaryRepository.createDiaryEntry(JWT_TOKEN, "Existing Title", "Existing Content", listOf(EmotionEnum.JOY), listOf("ExistingTag"))
+
+        // When
+        viewModel.initialize(existingEntry.id)
+        advanceUntilIdle()
+
+        // Then
+        val state = viewModel.uiState.value
+        assertTrue(state is CreateEntryUiState.Form)
+        state as CreateEntryUiState.Form
+        assertEquals(existingEntry.id, state.id)
+        assertEquals("Existing Title", state.title)
+        assertEquals("Existing Content", state.content)
+        assertEquals(listOf(EmotionEnum.JOY), state.emotions)
+        assertEquals(listOf("ExistingTag"), state.tags)
+    }
+
+    @Test
+    fun `update existing entry`() = runTest {
+        // Given
+        val existingEntry = fakeDreamDiaryRepository.createDiaryEntry(JWT_TOKEN, "Existing Title", "Existing Content", listOf(EmotionEnum.JOY), listOf("ExistingTag"))
+        viewModel.initialize(existingEntry.id)
+        advanceUntilIdle()
+
+        // When
+        viewModel.onTitleChanged("Updated Title")
+        viewModel.onContentChanged("Updated Content")
+        viewModel.onEmotionChanged(EmotionEnum.CURIOSITY)
+        viewModel.onTagAdded("NewTag")
+        viewModel.onSubmit()
+        advanceUntilIdle()
+
+        // Then
+        val state = viewModel.uiState.value
+        assertTrue(state is CreateEntryUiState.Success)
+
+        val updatedEntry = fakeDreamDiaryRepository.getDiaryEntryById(JWT_TOKEN, existingEntry.id)
+        assertEquals("Updated Title", updatedEntry.title)
+        assertEquals("Updated Content", updatedEntry.content)
+        assertEquals(listOf("JOY", "CURIOSITY"), updatedEntry.emotions)
+        assertEquals(listOf("ExistingTag", "NewTag"), updatedEntry.tags)
     }
 }

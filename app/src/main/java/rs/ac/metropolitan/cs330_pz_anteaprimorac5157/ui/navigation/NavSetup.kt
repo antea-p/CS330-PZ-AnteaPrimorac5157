@@ -30,9 +30,9 @@ fun NavSetup(
     ) {
         composable(NavigationRoutes.Diary.route) {
             DiaryScreen(
-                onCreateEntry = { navController.navigate(NavigationRoutes.CreateEntry.route) },
+                onCreateEntry = { navController.navigate(NavigationRoutes.CreateEntry.createRoute()) },
                 onEntryClick = { id ->
-                    navController.navigate("${NavigationRoutes.DiaryEntryDetails.route}/${id}")
+                    navController.navigate(NavigationRoutes.DiaryEntryDetails.createRoute(id))
                 },
                 needsRefresh = needsDiaryRefresh,
                 onRefreshComplete = { needsDiaryRefresh = false }
@@ -42,7 +42,7 @@ fun NavSetup(
             AccountScreen()
         }
         composable(
-            route = "${NavigationRoutes.DiaryEntryDetails.route}/{entryId}",
+            route = NavigationRoutes.DiaryEntryDetails.route,
             arguments = listOf(navArgument("entryId") { type = NavType.IntType })
         ) { backStackEntry ->
             val entryId = backStackEntry.arguments?.getInt("entryId") ?: return@composable
@@ -52,13 +52,18 @@ fun NavSetup(
                     needsDiaryRefresh = true
                     navController.popBackStack()
                 },
-//                onEntryDeleted = {
-//                    navController.popBackStack(NavigationRoutes.Diary.route, false)
-//                }
+                onNavigateToEdit = { id ->
+                    navController.navigate(NavigationRoutes.CreateEntry.createRoute(id))
+                }
             )
         }
-        composable(NavigationRoutes.CreateEntry.route) {
+        composable(
+            route = NavigationRoutes.CreateEntry.route,
+            arguments = listOf(navArgument("entryId") { type = NavType.IntType; defaultValue = -1 })
+        ) { backStackEntry ->
+            val entryId = backStackEntry.arguments?.getInt("entryId")?.takeIf { it != -1 }
             CreateEntryScreen(
+                entryId = entryId,
                 onNavigateBack = {
                     needsDiaryRefresh = true
                     navController.popBackStack()

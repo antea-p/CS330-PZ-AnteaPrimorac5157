@@ -50,11 +50,16 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.CreateEnt
 
 @Composable
 fun CreateEntryScreen(
+    entryId: Int?,
     viewModel: CreateEntryViewModel = hiltViewModel<CreateEntryViewModelImpl>(),
     onNavigateBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.observeAsState(CreateEntryUiState.Loading)
     val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(entryId) {
+        viewModel.initialize(entryId)
+    }
 
     when (val state = uiState) {
         is CreateEntryUiState.Loading -> CircularProgressIndicator()
@@ -93,7 +98,7 @@ fun CreateEntryForm(
         OutlinedTextField(
             value = state.title,
             onValueChange = onTitleChanged,
-            label = { Text("Title") },
+            label = { Text(if (state.id == null) "Title" else "Edit Title") },
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag("title_input")
@@ -128,7 +133,7 @@ fun CreateEntryForm(
                 .align(Alignment.End)
                 .testTag("submit_button"),
         ) {
-            Text("Submit")
+            Text(if (state.id == null) "Create" else "Update")
         }
     }
 }

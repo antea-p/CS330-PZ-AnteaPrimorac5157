@@ -36,6 +36,31 @@ class FakeDreamDiaryRepository : DreamDiaryRepository {
             ?: throw NoSuchElementException("No diary entry found with id $id")
     }
 
+    override suspend fun updateDiaryEntry(
+        token: String,
+        id: Int,
+        title: String,
+        content: String,
+        emotions: List<EmotionEnum>,
+        tags: List<String>
+    ): DiaryEntry {
+        val existingEntryIndex = diaryEntries.indexOfFirst { it.id == id }
+        if (existingEntryIndex != -1) {
+            val updatedEntry = DiaryEntry(
+                id = id,
+                title = title,
+                content = content,
+                createdDate = diaryEntries[existingEntryIndex].createdDate,
+                emotions = emotions.map { it.name },
+                tags = tags
+            )
+            diaryEntries[existingEntryIndex] = updatedEntry
+            return updatedEntry
+        } else {
+            throw NoSuchElementException("No diary entry found with id $id")
+        }
+    }
+
     override suspend fun deleteDiaryEntry(token: String, id: Int) {
         val entryToRemove = diaryEntries.find { it.id == id }
         if (entryToRemove != null) {

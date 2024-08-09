@@ -18,7 +18,23 @@ class NavigationRoutesTest {
 
     @Test
     fun `test Diary Entry Details route`() {
-        assertEquals("diary_entry_details", NavigationRoutes.DiaryEntryDetails.route)
+        assertEquals("diary_entry_details/{entryId}", NavigationRoutes.DiaryEntryDetails.route)
+    }
+
+    @Test
+    fun `test Create Entry route gets valid ID when editing existing entry`() {
+        assertEquals("create_entry?entryId={entryId}", NavigationRoutes.CreateEntry.route)
+    }
+
+    @Test
+    fun `test Create Entry route creates valid route for new entry`() {
+        assertEquals("create_entry", NavigationRoutes.CreateEntry.createRoute())
+        assertEquals("create_entry?entryId=1", NavigationRoutes.CreateEntry.createRoute(1))
+    }
+
+    @Test
+    fun `test Diary Entry Details route creation`() {
+        assertEquals("diary_entry_details/1", NavigationRoutes.DiaryEntryDetails.createRoute(1))
     }
 
     @Test

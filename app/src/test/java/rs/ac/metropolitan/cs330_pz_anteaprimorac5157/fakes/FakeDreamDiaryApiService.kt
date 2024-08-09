@@ -9,6 +9,7 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DiaryEntry
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApiService
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.LoginRequest
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.LoginResponse
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.UpdateDiaryEntryRequest
 
 class FakeDreamDiaryApiService : DreamDiaryApiService {
     private val diaryEntries = mutableListOf<DiaryEntry>()
@@ -37,7 +38,6 @@ class FakeDreamDiaryApiService : DreamDiaryApiService {
         TODO("Not yet implemented")
     }
 
-
     override suspend fun getDiaryEntries(token: String): List<DiaryEntry> {
         throwExceptionIfNeeded()
         return diaryEntries
@@ -61,6 +61,25 @@ class FakeDreamDiaryApiService : DreamDiaryApiService {
         )
         diaryEntries.add(newEntry)
         return newEntry
+    }
+
+    override suspend fun updateDiaryEntry(token: String, entry: UpdateDiaryEntryRequest): DiaryEntry {
+        throwExceptionIfNeeded()
+        val index = diaryEntries.indexOfFirst { it.id == entry.id }
+        if (index != -1) {
+            val updatedEntry = DiaryEntry(
+                id = entry.id,
+                title = entry.title,
+                content = entry.content,
+                createdDate = diaryEntries[index].createdDate,
+                tags = entry.tags,
+                emotions = entry.emotions
+            )
+            diaryEntries[index] = updatedEntry
+            return updatedEntry
+        } else {
+            throw NoSuchElementException("No entry found with id ${entry.id}")
+        }
     }
 
     override suspend fun deleteDiaryEntry(token: String, id: Int): Response<Unit> {

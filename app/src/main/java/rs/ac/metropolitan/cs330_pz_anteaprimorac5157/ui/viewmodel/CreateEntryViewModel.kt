@@ -7,6 +7,7 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
 sealed class CreateEntryUiState {
     object LoggedOut : CreateEntryUiState()
     data class Form(
+        val id: Int? = null,
         val title: String,
         val content: String,
         val emotions: List<EmotionEnum>,
@@ -20,6 +21,7 @@ sealed class CreateEntryUiState {
 interface CreateEntryViewModel {
     val _uiState: MutableLiveData<CreateEntryUiState>
     val uiState: LiveData<CreateEntryUiState>
+    fun initialize(entryId: Int?)
     fun onTitleChanged(title: String)
     fun onContentChanged(content: String)
     fun onEmotionChanged(emotion: EmotionEnum)

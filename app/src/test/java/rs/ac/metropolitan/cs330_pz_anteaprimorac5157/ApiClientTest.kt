@@ -15,6 +15,7 @@ import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.DreamDiaryApiS
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Emotion
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.LoginRequest
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.Tag
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.data.network.UpdateDiaryEntryRequest
 
 class ApiClientTest {
     private lateinit var mockWebServer: MockWebServer
@@ -337,6 +338,56 @@ class ApiClientTest {
         assertTrue(requestBody.contains("\"content\":\"This is a complex entry\""))
         assertTrue(requestBody.contains("\"tags\":[{\"name\":\"Important\"},{\"name\":\"Work\"}]"))
         assertTrue(requestBody.contains("\"emotions\":[{\"id\":1,\"name\":\"Happy\"},{\"id\":2,\"name\":\"Excited\"}]"))
+    }
+
+    @Test
+    fun `updateDiaryEntry updates an existing diary entry`() = runBlocking {
+        // Given
+        val mockResponse = MockResponse()
+            .setResponseCode(200)
+            .setBody("""
+            {
+                "id": 1,
+                "title": "Updated Entry",
+                "content": "This is an updated entry",
+                "createdDate": "2024-05-01",
+                "userId": 1,
+                "tags": [{"id": 1, "name": "Updated"}],
+                "emotions": [{"id": 1, "name": "Excited"}]
+            }
+        """.trimIndent())
+        mockWebServer.enqueue(mockResponse)
+
+        // When
+        val updatedEntry = api.updateDiaryEntry("Bearer $JWT_TOKEN", UpdateDiaryEntryRequest(
+            id = 1,
+            title = "Updated Entry",
+            content = "This is an updated entry",
+            tags = listOf(Tag("Updated")),
+            emotions = listOf(Emotion(1, "Excited"))
+        )
+        )
+
+        // Then
+        assertEquals(1, updatedEntry.id)
+        assertEquals("Updated Entry", updatedEntry.title)
+        assertEquals("This is an updated entry", updatedEntry.content)
+        assertEquals(1, updatedEntry.tags.size)
+        assertEquals("Updated", updatedEntry.tags[0].name)
+        assertEquals(1, updatedEntry.emotions.size)
+        assertEquals("Excited", updatedEntry.emotions[0].name)
+
+        val request = mockWebServer.takeRequest()
+        assertEquals("POST", request.method)
+        assertEquals("/api/v1/diary", request.path)
+        assertEquals("Bearer $JWT_TOKEN", request.getHeader("Authorization"))
+
+        val requestBody = request.body.readUtf8()
+        assertTrue(requestBody.contains("\"id\":1"))
+        assertTrue(requestBody.contains("\"title\":\"Updated Entry\""))
+        assertTrue(requestBody.contains("\"content\":\"This is an updated entry\""))
+        assertTrue(requestBody.contains("\"tags\":[{\"name\":\"Updated\"}]"))
+        assertTrue(requestBody.contains("\"emotions\":[{\"id\":1,\"name\":\"Excited\"}]"))
     }
 
     @Test

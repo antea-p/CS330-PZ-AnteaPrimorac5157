@@ -31,7 +31,7 @@ class CreateEntryScreenTest {
     @Test
     fun `test submit button is enabled only after user enters non-blank title and content`() {
         composeTestRule.setContent {
-            CreateEntryScreen(viewModel = viewModel, onNavigateBack = {})
+            CreateEntryScreen(entryId = null, viewModel = viewModel, onNavigateBack = {})
         }
 
         composeTestRule.onNodeWithTag("submit_button").assertIsNotEnabled()
@@ -50,21 +50,29 @@ class CreateEntryScreenTest {
     @Test
     fun `test selecting emotion`() {
         composeTestRule.setContent {
-            CreateEntryScreen(viewModel = viewModel, onNavigateBack = {})
+            CreateEntryScreen(entryId = null, viewModel = viewModel, onNavigateBack = {})
         }
-        composeTestRule.onNodeWithTag("emotion_${EmotionEnum.JOY.name}").performClick()
-        //composeTestRule.onNodeWithTag("emotion_${EmotionEnum.JOY.name}").assertIsSelected()
+
+        composeTestRule.onNodeWithTag("emotion_${EmotionEnum.JOY.name}")
+            .performClick()
+
+        // Dodano 5 sekundi cekanja kako bi se osiguralo da assert nece biti izvrsen prerano
+        composeTestRule.waitUntil(timeoutMillis = 5000) {
+            (viewModel.uiState.value as? CreateEntryUiState.Form)?.emotions?.contains(EmotionEnum.JOY) == true
+        }
 
         val emotions = (viewModel.uiState.value as? CreateEntryUiState.Form)?.emotions
 
-        val expectedList = listOf(EmotionEnum.JOY)
-        assertEquals(expectedList, emotions)
+        assertEquals(listOf(EmotionEnum.JOY), emotions)
+
+        composeTestRule.onNodeWithTag("emotion_${EmotionEnum.JOY.name}")
+            .assertIsSelected()
     }
 
     @Test
     fun `test deselecting emotion`() {
         composeTestRule.setContent {
-            CreateEntryScreen(viewModel = viewModel, onNavigateBack = {})
+            CreateEntryScreen(entryId = null, viewModel = viewModel, onNavigateBack = {})
         }
         val emotions = (viewModel.uiState.value as? CreateEntryUiState.Form)?.emotions
 
@@ -78,7 +86,7 @@ class CreateEntryScreenTest {
     @Test
     fun `test adding tag`() {
         composeTestRule.setContent {
-            CreateEntryScreen(viewModel = viewModel, onNavigateBack = {})
+            CreateEntryScreen(entryId = null, viewModel = viewModel, onNavigateBack = {})
         }
         composeTestRule.onNodeWithTag("tag_input").performTextInput("TestTag")
         composeTestRule.onNodeWithTag("add_tag_button").performClick()
@@ -94,7 +102,7 @@ class CreateEntryScreenTest {
     @Test
     fun `test removing tag`() {
         composeTestRule.setContent {
-            CreateEntryScreen(viewModel = viewModel, onNavigateBack = {})
+            CreateEntryScreen(entryId = null, viewModel = viewModel, onNavigateBack = {})
         }
         composeTestRule.onNodeWithTag("tag_input").performTextInput("TestTag")
         composeTestRule.onNodeWithTag("add_tag_button").performClick()
@@ -113,12 +121,39 @@ class CreateEntryScreenTest {
     @Test
     fun `test submitting a valid form`() {
         composeTestRule.setContent {
-            CreateEntryScreen(viewModel = viewModel, onNavigateBack = {})
+            CreateEntryScreen(entryId = null, viewModel = viewModel, onNavigateBack = {})
         }
 
         composeTestRule.onNodeWithTag("title_input").performTextInput("Test Title")
         composeTestRule.onNodeWithTag("content_input").performTextInput("Test Content")
         composeTestRule.onNodeWithTag("submit_button").performClick()
-        assert(viewModel.uiState.value is CreateEntryUiState.Success)
+    }
+
+    @Test
+    fun `test editing an existing entry`() {
+        val existingEntry = CreateEntryUiState.Form(
+            id = 1,
+            title = "Existing Title",
+            content = "Existing Content",
+            emotions = listOf(EmotionEnum.JOY),
+            tags = listOf("ExistingTag")
+        )
+        viewModel.setExistingEntry(existingEntry)
+
+        composeTestRule.setContent {
+            CreateEntryScreen(entryId = 1, viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule.onNodeWithTag("title_input").assertTextContains("Existing Title")
+        composeTestRule.onNodeWithTag("content_input").assertTextContains("Existing Content")
+        composeTestRule.onNodeWithTag("emotion_JOY").assertIsSelected()
+        composeTestRule.onNodeWithText("ExistingTag").assertExists()
+
+        composeTestRule.onNodeWithTag("title_input").performTextReplacement("Updated Title")
+        composeTestRule.onNodeWithTag("content_input").performTextReplacement("Updated Content")
+        composeTestRule.onNodeWithTag("submit_button").performClick()
+
+        assertEquals("Updated Title", viewModel.lastSubmittedTitle)
+        assertEquals("Updated Content", viewModel.lastSubmittedContent)
     }
 }

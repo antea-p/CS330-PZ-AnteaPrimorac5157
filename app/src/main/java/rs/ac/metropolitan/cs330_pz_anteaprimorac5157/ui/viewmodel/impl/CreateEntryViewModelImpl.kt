@@ -24,19 +24,43 @@ class CreateEntryViewModelImpl @Inject constructor(
     override val _uiState = MutableLiveData<CreateEntryUiState>(CreateEntryUiState.Loading)
     override val uiState: LiveData<CreateEntryUiState> = _uiState
 
-    init {
+    override fun initialize(entryId: Int?) {
         viewModelScope.launch {
             val username = authService.getUsername().first()
-            _uiState.value = if (username != null) {
-                CreateEntryUiState.Form(
-                    title = "",
-                    content = "",
-                    emotions = emptyList(),
-                    tags = emptyList()
+            if (username != null) {
+                if (entryId != null) {
+                    loadExistingEntry(entryId)
+                } else {
+                    _uiState.value = CreateEntryUiState.Form(
+                        title = "",
+                        content = "",
+                        emotions = emptyList(),
+                        tags = emptyList()
+                    )
+                }
+            } else {
+                _uiState.value = CreateEntryUiState.LoggedOut
+            }
+        }
+    }
+
+    private suspend fun loadExistingEntry(id: Int) {
+        try {
+            val token = authService.getToken().first()
+            if (token != null) {
+                val entry = repository.getDiaryEntryById(token, id)
+                _uiState.value = CreateEntryUiState.Form(
+                    id = entry.id,
+                    title = entry.title,
+                    content = entry.content,
+                    emotions = entry.emotions.mapNotNull { EmotionEnum.valueOf(it.uppercase()) },
+                    tags = entry.tags
                 )
             } else {
-                CreateEntryUiState.LoggedOut
+                _uiState.value = CreateEntryUiState.LoggedOut
             }
+        } catch (e: Exception) {
+            _uiState.value = CreateEntryUiState.Error(e.message ?: "Failed to load entry")
         }
     }
 
@@ -83,13 +107,24 @@ class CreateEntryViewModelImpl @Inject constructor(
                 try {
                     val token = authService.getToken().first()
                     if (token != null) {
-                        val result = repository.createDiaryEntry(
-                            token = token,
-                            title = currentState.title,
-                            content = currentState.content,
-                            emotions = currentState.emotions,
-                            tags = currentState.tags
-                        )
+                        if (currentState.id != null) {
+                            repository.updateDiaryEntry(
+                                token = token,
+                                id = currentState.id,
+                                title = currentState.title,
+                                content = currentState.content,
+                                emotions = currentState.emotions,
+                                tags = currentState.tags
+                            )
+                        } else {
+                            repository.createDiaryEntry(
+                                token = token,
+                                title = currentState.title,
+                                content = currentState.content,
+                                emotions = currentState.emotions,
+                                tags = currentState.tags
+                            )
+                        }
                         _uiState.value = CreateEntryUiState.Success
                     } else {
                         _uiState.value = CreateEntryUiState.Error("User not authenticated")
@@ -108,4 +143,3 @@ class CreateEntryViewModelImpl @Inject constructor(
         }
     }
 }
-

@@ -28,3 +28,11 @@ data class CreateDiaryEntryRequest(
     val tags: List<Tag> = emptyList(),
     val emotions: List<Emotion> = emptyList()
 )
+
+data class UpdateDiaryEntryRequest(
+    val id: Int,
+    val title: String,
+    val content: String,
+    val tags: List<Tag> = emptyList(),
+    val emotions: List<Emotion> = emptyList()
+)

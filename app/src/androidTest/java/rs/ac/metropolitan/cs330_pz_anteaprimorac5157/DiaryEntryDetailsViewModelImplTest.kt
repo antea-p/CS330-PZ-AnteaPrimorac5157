@@ -65,6 +65,7 @@ class DiaryEntryDetailsViewModelImplTest {
         assertTrue(state is DiaryEntryDetailsUiState.Error)
     }
 
+
     @Test
     fun `deleteDiaryEntry deletes entry and sets Deleted state`() = runTest {
         // Given
