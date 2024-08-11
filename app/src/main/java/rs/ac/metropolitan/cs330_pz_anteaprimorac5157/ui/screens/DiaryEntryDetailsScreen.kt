@@ -168,7 +168,11 @@ fun DeleteConfirmationDialog(
         confirmButton = {
             Button(
                 onClick = onConfirm,
-                modifier = Modifier.testTag("confirm_delete_button")
+                modifier = Modifier.testTag("confirm_delete_button"),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError
+                )
             ) {
                 Text("Delete")
             }
@@ -176,11 +180,18 @@ fun DeleteConfirmationDialog(
         dismissButton = {
             Button(
                 onClick = onDismiss,
-                modifier = Modifier.testTag("dismiss_delete_button")
+                modifier = Modifier.testTag("dismiss_delete_button"),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
             ) {
                 Text("Cancel")
             }
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.surface,
+        titleContentColor = MaterialTheme.colorScheme.onSurface,
+        textContentColor = MaterialTheme.colorScheme.onSurfaceVariant
     )
 }
 

@@ -117,7 +117,7 @@ fun CreateEntryForm(
         OutlinedTextField(
             value = state.title,
             onValueChange = onTitleChanged,
-            label = { Text(if (state.id == null) "Title" else "Edit Title") },
+            label = { Text("Title" ) },
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag("title_input")
