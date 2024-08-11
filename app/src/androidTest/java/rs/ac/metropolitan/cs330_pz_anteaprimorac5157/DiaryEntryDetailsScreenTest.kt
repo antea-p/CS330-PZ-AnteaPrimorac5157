@@ -53,7 +53,8 @@ class DiaryEntryDetailsScreenTest {
                 entryId = 1,
                 viewModel = viewModel,
                 onNavigateBack = {},
-                onNavigateToEdit = {}            )
+                onNavigateToEdit = {}
+            )
         }
 
         composeTestRule.onNodeWithTag("tags_row").assertDoesNotExist()
@@ -87,7 +88,8 @@ class DiaryEntryDetailsScreenTest {
                 entryId = 1,
                 viewModel = viewModel,
                 onNavigateBack = {},
-                onNavigateToEdit = {}            )
+                onNavigateToEdit = {}
+            )
         }
 
         composeTestRule.onNodeWithTag("emotions_row").assertExists()
@@ -130,4 +132,32 @@ class DiaryEntryDetailsScreenTest {
         composeTestRule.onNodeWithTag("edit_button").performClick()
         assert(navigatedToEditId == 1)
     }
+
+    @Test
+    fun `test Delete button shows confirmation dialog`() {
+        val entry = DiaryEntry(1, "Test Entry", "Content", "2023-01-01", emptyList(), emptyList())
+        viewModel.setDiaryEntry(entry)
+
+        composeTestRule.setContent {
+            DiaryEntryDetailsScreen(
+                entryId = 1,
+                viewModel = viewModel,
+                onNavigateBack = {},
+                onNavigateToEdit = {}
+            )
+        }
+
+        composeTestRule.onNodeWithTag("delete_button").assertExists()
+        composeTestRule.onNodeWithTag("delete_button").performClick()
+
+        // Provjeri da se otvara dijalog potvrde
+        composeTestRule.onNodeWithText("Delete Entry").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Are you sure you want to delete this entry? This action cannot be undone.").assertIsDisplayed()
+
+        // Provjeri da postoje i dugme za potvrdu i za ponistavanje brisanja
+        composeTestRule.onNodeWithTag("confirm_delete_button").assertExists()
+        composeTestRule.onNodeWithTag("dismiss_delete_button").assertExists()
+
+    }
+
 }

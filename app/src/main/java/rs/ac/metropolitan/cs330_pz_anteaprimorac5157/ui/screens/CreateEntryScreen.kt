@@ -4,9 +4,12 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -40,11 +45,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.components.AnimatedButton
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.components.PulsingIconButton
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.theme.LightPurple
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.CreateEntryUiState
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.CreateEntryViewModel
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.CreateEntryViewModelImpl
@@ -95,7 +102,13 @@ fun CreateEntryForm(
     onSubmit: () -> Unit,
     focusManager: FocusManager
 ) {
-    Column(modifier = Modifier.padding(16.dp)) {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .verticalScroll(scrollState)
+    ) {
         Text(
             text = if (state.id == null) "Create New Entry" else "Edit Entry",
             style = MaterialTheme.typography.headlineMedium,
@@ -144,7 +157,7 @@ fun CreateEntryForm(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun EmotionSelector(
     selectedEmotions: List<EmotionEnum>,
@@ -152,15 +165,14 @@ fun EmotionSelector(
 ) {
     Column {
         Text("Emotions", style = MaterialTheme.typography.titleMedium)
-        LazyRow(
+        FlowRow(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(vertical = 8.dp)
+            maxItemsInEachRow = 3
         ) {
-            items(EmotionEnum.entries.toTypedArray()) { emotion ->
+            EmotionEnum.entries.forEach { emotion ->
                 val isSelected = selectedEmotions.contains(emotion)
                 val backgroundColor by animateColorAsState(
-                    targetValue = if (isSelected) MaterialTheme.colorScheme.primaryContainer
-                    else MaterialTheme.colorScheme.surface,
+                    targetValue = if (isSelected) LightPurple else MaterialTheme.colorScheme.surface,
                     animationSpec = tween(durationMillis = 300)
                 )
                 val contentColor by animateColorAsState(
@@ -186,6 +198,7 @@ fun EmotionSelector(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TagInput(
     tags: List<String>,
@@ -222,11 +235,11 @@ fun TagInput(
                 modifier = Modifier.testTag("add_tag_button")
             )
         }
-        LazyRow(
+        FlowRow(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(vertical = 8.dp)
+            maxItemsInEachRow = 3
         ) {
-            items(tags) { tag ->
+            tags.forEach { tag ->
                 ChipItem(
                     text = tag,
                     onRemove = { onTagRemoved(tag) },

@@ -219,6 +219,6 @@ val surfaceContainerDarkHighContrast = Color(0xFF1C2024)
 val surfaceContainerHighDarkHighContrast = Color(0xFF262A2E)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF313539)
 
-// Privremene boje
+// Za chipove emocija i tagova
 val LightPurple = Color(0xFFD4B1F7)
 val LightBlue = Color(0xFF84C6F5)
