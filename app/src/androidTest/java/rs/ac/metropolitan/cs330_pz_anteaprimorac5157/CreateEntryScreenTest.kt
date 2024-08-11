@@ -100,6 +100,17 @@ class CreateEntryScreenTest {
     }
 
     @Test
+    fun `test add tag button is enabled only when tag input is not blank`() {
+        composeTestRule.setContent {
+            CreateEntryScreen(entryId = null, viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule.onNodeWithTag("add_tag_button").assertIsNotEnabled()
+        composeTestRule.onNodeWithTag("tag_input").performTextInput("TestTag")
+        composeTestRule.onNodeWithTag("add_tag_button").assertIsEnabled()
+    }
+
+    @Test
     fun `test removing tag`() {
         composeTestRule.setContent {
             CreateEntryScreen(entryId = null, viewModel = viewModel, onNavigateBack = {})

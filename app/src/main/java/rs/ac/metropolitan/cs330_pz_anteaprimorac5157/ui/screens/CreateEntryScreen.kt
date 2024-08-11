@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.domain.EmotionEnum
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.components.AnimatedButton
+import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.components.PulsingIconButton
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.CreateEntryUiState
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.CreateEntryViewModel
 import rs.ac.metropolitan.cs330_pz_anteaprimorac5157.ui.viewmodel.impl.CreateEntryViewModelImpl
@@ -95,6 +96,11 @@ fun CreateEntryForm(
     focusManager: FocusManager
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
+        Text(
+            text = if (state.id == null) "Create New Entry" else "Edit Entry",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
         OutlinedTextField(
             value = state.title,
             onValueChange = onTitleChanged,
@@ -130,7 +136,7 @@ fun CreateEntryForm(
             onClick = onSubmit,
             enabled = (state.title.isNotBlank() && state.content.isNotBlank()),
             modifier = Modifier
-                .align(Alignment.End)
+                .align(Alignment.CenterHorizontally)
                 .testTag("submit_button"),
         ) {
             Text(if (state.id == null) "Create" else "Update")
@@ -157,6 +163,11 @@ fun EmotionSelector(
                     else MaterialTheme.colorScheme.surface,
                     animationSpec = tween(durationMillis = 300)
                 )
+                val contentColor by animateColorAsState(
+                    targetValue = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer
+                    else MaterialTheme.colorScheme.onSurface,
+                    animationSpec = tween(durationMillis = 300)
+                )
                 FilterChip(
                     selected = isSelected,
                     onClick = { onEmotionChanged(emotion) },
@@ -165,7 +176,9 @@ fun EmotionSelector(
                         .padding(end = 8.dp)
                         .testTag("emotion_${emotion.name}"),
                     colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = backgroundColor
+                        selectedContainerColor = backgroundColor,
+                        selectedLabelColor = contentColor,
+                        labelColor = contentColor
                     )
                 )
             }
@@ -196,7 +209,7 @@ fun TagInput(
                     .weight(1f)
                     .testTag("tag_input")
             )
-            IconButton(
+            PulsingIconButton(
                 onClick = {
                     if (newTag.isNotBlank()) {
                         onTagAdded(newTag)
@@ -204,10 +217,10 @@ fun TagInput(
                         focusManager.clearFocus()
                     }
                 },
+                icon = { Icon(Icons.Default.Add, contentDescription = "Add Tag") },
+                enabled = newTag.isNotBlank(),
                 modifier = Modifier.testTag("add_tag_button")
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Tag")
-            }
+            )
         }
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
